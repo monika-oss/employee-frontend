@@ -1,0 +1,577 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - EMS</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+    <!-- AOS Animation CSS -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css?v=2">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap');
+        
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif !important;
+            background: #f4f7fa !important;
+            min-height: 100vh;
+            position: relative;
+            overflow-x: hidden;
+        }
+        
+        /* Hide global background glow elements from style.css */
+        body::before, body::after {
+            display: none !important;
+        }
+        
+        /* Background Decorations matching mockup exactly */
+        .bg-shape {
+            position: absolute;
+            pointer-events: none;
+            z-index: -1;
+        }
+        .bg-circle-tl {
+            top: 8%;
+            left: 3%;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: #dbeafe;
+            opacity: 0.8;
+        }
+        .bg-blob-bl {
+            bottom: -10%;
+            left: -8%;
+            width: 320px;
+            height: 320px;
+            border-radius: 50%;
+            background: #e0f2fe;
+            opacity: 0.5;
+        }
+        .bg-blob-tr {
+            top: -8%;
+            right: -6%;
+            width: 260px;
+            height: 260px;
+            border-radius: 50%;
+            background: #e0f2fe;
+            opacity: 0.5;
+        }
+        .bg-dots {
+            background-image: radial-gradient(#94a3b8 2px, transparent 2px);
+            background-size: 16px 16px;
+            opacity: 0.45;
+        }
+        .bg-dots-left {
+            left: 2%;
+            top: 35%;
+            width: 50px;
+            height: 160px;
+        }
+        .bg-dots-right {
+            right: 2%;
+            top: 50%;
+            width: 50px;
+            height: 160px;
+        }
+        
+        /* Custom View Toggle (Pill Switch) */
+        .custom-toggle {
+            background: #ffffff;
+            border-radius: 12px;
+            padding: 4px;
+            display: inline-flex;
+            align-items: center;
+            border: 1px solid rgba(226, 232, 240, 0.8);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.02);
+        }
+        .toggle-btn {
+            border: none;
+            background: transparent;
+            border-radius: 8px;
+            width: 38px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #64748b;
+            font-size: 1.05rem;
+            transition: all 0.2s ease;
+            cursor: pointer;
+        }
+        .toggle-btn.active {
+            background: #2563eb;
+            color: #ffffff;
+            box-shadow: 0 4px 10px rgba(37, 99, 235, 0.2);
+        }
+        
+        /* Button styling matching add employee */
+        .btn-add-emp {
+            background: #2563eb;
+            color: #ffffff;
+            border: none;
+            padding: 0.65rem 1.25rem;
+            font-weight: 700;
+            font-size: 0.85rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(37, 99, 235, 0.2);
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .btn-add-emp:hover {
+            background: #1d4ed8;
+            box-shadow: 0 6px 20px rgba(37, 99, 235, 0.3);
+            color: #ffffff;
+            transform: translateY(-1px);
+        }
+        
+        /* Table Card Container */
+        .table-container {
+            background: #ffffff;
+            border-radius: 20px;
+            border: 1px solid rgba(226, 232, 240, 0.8);
+            box-shadow: 0 15px 45px rgba(0, 0, 0, 0.03);
+            overflow: hidden;
+            margin-bottom: 2rem;
+        }
+        
+        /* Table design customization */
+        .table {
+            margin: 0;
+            background: transparent;
+        }
+        .table thead {
+            background: #2563eb !important;
+        }
+        .table thead th {
+            color: #ffffff !important;
+            font-weight: 700;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            padding: 1.1rem 1.5rem;
+            border: none;
+            vertical-align: middle;
+        }
+        .table tbody td {
+            padding: 1.25rem 1.5rem;
+            vertical-align: middle;
+            border-bottom: 1px solid #f1f5f9;
+            color: #334155;
+            font-size: 0.9rem;
+        }
+        
+        /* Custom Row Avatars */
+        .avatar-circle-row {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1rem;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.03);
+            border: 1px solid transparent;
+        }
+        
+        /* Custom Department Badges */
+        .badge-dept {
+            padding: 0.4rem 1rem;
+            border-radius: 999px;
+            font-weight: 700;
+            font-size: 0.75rem;
+            display: inline-block;
+            letter-spacing: 0.3px;
+        }
+        .badge-it { background: #eff6ff; color: #2563eb; border: 1.5px solid #bfdbfe; }
+        .badge-design { background: #f3e8ff; color: #9333ea; border: 1.5px solid #e9d5ff; }
+        .badge-marketing { background: #f0fdf4; color: #16a34a; border: 1.5px solid #bbf7d0; }
+        .badge-hr { background: #fff7ed; color: #ea580c; border: 1.5px solid #ffedd5; }
+        .badge-finance { background: #ecfeff; color: #0891b2; border: 1.5px solid #cffafe; }
+        .badge-other { background: #f1f5f9; color: #475569; border: 1.5px solid #e2e8f0; }
+        
+        /* Actions buttons round */
+        .btn-action-circle {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            border: 1.5px solid #bfdbfe;
+            background: #ffffff;
+            color: #2563eb;
+            transition: all 0.2s ease;
+            font-size: 0.9rem;
+        }
+        .btn-action-circle:hover {
+            background: #eff6ff;
+            transform: scale(1.05);
+        }
+        .btn-action-circle.delete {
+            border-color: #fecaca;
+            color: #ef4444;
+        }
+        .btn-action-circle.delete:hover {
+            background: #fef2f2;
+        }
+        
+        /* Pagination Styling */
+        .pagination .page-link {
+            transition: all 0.2s ease;
+            font-size: 0.85rem;
+        }
+        .pagination .page-link:hover {
+            background: #eff6ff !important;
+            color: #2563eb !important;
+        }
+        
+        /* Card View Redesign */
+        .emp-card-redesign {
+            background: #ffffff;
+            border-radius: 16px;
+            border: 1px solid rgba(226, 232, 240, 0.8);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.02);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        .emp-card-redesign:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 15px 35px rgba(99, 102, 241, 0.05);
+        }
+        .emp-card-avatar-wrapper {
+            position: relative;
+            width: 54px;
+            height: 54px;
+        }
+        .emp-card-avatar {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 1.15rem;
+            border: 1px solid transparent;
+        }
+        .emp-card-status {
+            position: absolute;
+            bottom: 1px;
+            right: 1px;
+            width: 12px;
+            height: 12px;
+            background-color: #10b981;
+            border: 2px solid #ffffff;
+            border-radius: 50%;
+        }
+        
+        /* Modal Custom Input Styling */
+        .custom-input {
+            padding-left: 42px !important;
+            padding-top: 0.65rem;
+            padding-bottom: 0.65rem;
+            border-radius: 10px;
+            border: 1px solid #e2e8f0;
+            color: #1e293b;
+            font-size: 0.95rem;
+            font-weight: 500;
+            background: #ffffff;
+        }
+        .custom-input:focus {
+            border-color: #2563eb;
+            box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.1);
+        }
+    </style>
+</head>
+<body>
+
+<!-- Decorative Background Shapes & Dot Patterns -->
+<div class="bg-shape bg-circle-tl"></div>
+<div class="bg-shape bg-blob-bl"></div>
+<div class="bg-shape bg-blob-tr"></div>
+<div class="bg-shape bg-dots-left bg-dots"></div>
+<div class="bg-shape bg-dots-right bg-dots"></div>
+
+<nav class="navbar navbar-expand-lg">
+    <div class="container">
+        <a class="navbar-brand" href="#">
+            <div class="d-flex align-items-center gap-2">
+                <div class="bg-primary bg-gradient text-white rounded p-1 shadow-sm d-flex align-items-center justify-content-center" style="width: 32px; height: 32px;">
+                    <i class="bi bi-layers-fill fs-6"></i>
+                </div>
+                <span class="fw-bolder tracking-tight" style="background: var(--accent-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Workspace</span>
+            </div>
+        </a>
+        <div class="d-flex align-items-center gap-3">
+            <div class="d-flex align-items-center gap-2">
+                <div class="avatar-circle shadow-sm" style="width: 38px; height: 38px; font-size: 1rem; background: #fff;">
+                    A
+                </div>
+                <div class="d-none d-sm-flex flex-column justify-content-center">
+                    <span class="fw-bold lh-1 text-dark" id="adminName" style="font-size: 0.9rem;">Admin</span>
+                    <span class="text-muted lh-1 mt-1" style="font-size: 0.75rem; font-weight: 500;">Administrator</span>
+                </div>
+            </div>
+            <div class="vr mx-1" style="opacity: 0.1;"></div>
+            <button class="btn btn-action delete border-0 bg-white shadow-sm" id="logoutBtn" title="Logout" onclick="logout()">
+                <i class="bi bi-box-arrow-right"></i>
+            </button>
+        </div>
+    </div>
+</nav>
+
+<div class="container mb-5">
+    <div class="d-flex justify-content-between align-items-center mb-4 mt-2" data-aos="fade-right" data-aos-delay="200">
+        <div class="d-flex align-items-center gap-3">
+            <div class="d-flex align-items-center justify-content-center rounded-circle" style="width: 48px; height: 48px; background: #eff6ff; color: #2563eb;">
+                <i class="bi bi-people-fill fs-4"></i>
+            </div>
+            <div>
+                <h3 class="fw-bold m-0" style="font-family: 'Plus Jakarta Sans', sans-serif; font-size: 1.75rem; letter-spacing: -0.02em; color: #0f172a;">Team Overview</h3>
+                <p class="text-muted m-0" style="font-size: 0.85rem;">Manage and overview all team members</p>
+            </div>
+        </div>
+        <div class="d-flex gap-3 align-items-center">
+            <div class="custom-toggle shadow-sm">
+                <button type="button" class="toggle-btn active" id="btnListView" title="List View">
+                    <i class="bi bi-list-ul"></i>
+                </button>
+                <button type="button" class="toggle-btn" id="btnCardView" title="Card View">
+                    <i class="bi bi-grid-fill"></i>
+                </button>
+            </div>
+            <button class="btn btn-add-emp shadow-sm" data-bs-toggle="modal" data-bs-target="#employeeModal" id="addEmpBtn">
+                <i class="bi bi-plus-lg"></i> Add Employee
+            </button>
+        </div>
+    </div>
+
+    <!-- Search and Filter Bar -->
+    <div class="d-flex justify-content-between align-items-center mb-3 mt-4 flex-wrap gap-3" data-aos="fade-up" data-aos-delay="300">
+        <div class="d-flex align-items-center gap-2">
+            <h5 class="fw-bold m-0" style="color: #0f172a;">Team Members</h5>
+            <span class="badge rounded-pill bg-primary text-white" id="totalMembersCount" style="font-size: 0.8rem; padding: 0.4rem 0.8rem; font-weight: 700;">0</span>
+        </div>
+        <div class="d-flex align-items-center gap-2">
+            <div class="position-relative" style="width: 260px;">
+                <input type="text" class="form-control" id="searchEmployees" placeholder="Search employees..." style="padding: 0.55rem 1rem 0.55rem 2.5rem; font-size: 0.85rem; border-radius: 12px; border: 1px solid #e2e8f0; background: #ffffff;">
+                <i class="bi bi-search" style="position: absolute; left: 1rem; top: 50%; transform: translateY(-50%); color: #94a3b8; font-size: 0.9rem;"></i>
+            </div>
+            <button class="btn btn-outline-danger d-flex align-items-center gap-2 d-none" id="clearFiltersBtn" type="button" style="border-radius: 12px; padding: 0.55rem 0.85rem;" title="Clear Filters" onclick="clearAllFilters()">
+                <i class="bi bi-x-lg"></i> Clear
+            </button>
+            <button class="btn btn-light d-flex align-items-center gap-2" type="button" data-bs-toggle="offcanvas" data-bs-target="#filterSidebar" aria-controls="filterSidebar" style="border-radius: 12px; border: 1px solid #e2e8f0; padding: 0.55rem 0.85rem; background: #ffffff; color: #64748b;" title="Filter Employees">
+                <i class="bi bi-funnel"></i> Filter
+            </button>
+        </div>
+    </div>
+    
+
+
+    <!-- List View (Table) -->
+    <div class="table-container" id="employeeTableView" data-aos="fade-up" data-aos-delay="400" data-aos-duration="800">
+        <div class="table-responsive">
+            <table class="table table-hover mb-0">
+                <thead style="font-size: 0.75rem; letter-spacing: 0.5px; text-transform: uppercase;">
+                    <tr>
+                        <th class="py-3 px-4 border-0" style="background-color: #2563eb; color: #ffffff; cursor: pointer; border-top-left-radius: 12px;" onclick="sortTable('employee_id')">ID</th>
+                        <th class="py-3 px-4 border-0" style="background-color: #2563eb; color: #ffffff; cursor: pointer;" onclick="sortTable('name')">NAME</th>
+                        <th class="py-3 px-4 border-0" style="background-color: #2563eb; color: #ffffff; cursor: pointer;" onclick="sortTable('email')">EMAIL</th>
+                        <th class="py-3 px-4 border-0" style="background-color: #2563eb; color: #ffffff; cursor: pointer;" onclick="sortTable('department')">DEPARTMENT</th>
+                        <th class="py-3 px-4 border-0" style="background-color: #2563eb; color: #ffffff; cursor: pointer;" onclick="sortTable('designation')">DESIGNATION</th>
+                        <th class="py-3 px-4 border-0" style="background-color: #2563eb; color: #ffffff; border-top-right-radius: 12px;">ACTIONS</th>
+                    </tr>
+                </thead>
+                <tbody id="employeeTableBody">
+                    <!-- Filled by JS -->
+                </tbody>
+            </table>
+        </div>
+        
+        <!-- Table Pagination Footer matching mockup exactly -->
+        <div class="d-flex justify-content-between align-items-center px-4 py-3 border-top bg-white" style="border-bottom-left-radius: 20px; border-bottom-right-radius: 20px;">
+            <div class="text-muted small" id="paginationInfo">Showing 1 to 5 of 5 employees</div>
+            <nav aria-label="Page navigation">
+                <ul class="pagination pagination-sm m-0 align-items-center gap-1" id="adminPagination">
+                    <!-- Dynamic Pagination -->
+                </ul>
+            </nav>
+        </div>
+    </div>
+
+    <!-- Card View (Grid) -->
+    <div class="row g-4 d-none" id="employeeCardView" data-aos="fade-up" data-aos-delay="400" data-aos-duration="800">
+        <!-- Filled by JS -->
+    </div>
+    
+    <!-- Card View Pagination Container -->
+    <div id="cardPaginationContainer" class="d-flex justify-content-center mt-4 d-none">
+        <nav aria-label="Page navigation">
+            <ul class="pagination pagination-sm m-0 align-items-center gap-1" id="adminPaginationCard">
+                <!-- Dynamic Pagination -->
+            </ul>
+        </nav>
+    </div>
+</div>
+
+<!-- Employee Modal -->
+<div class="modal fade" id="employeeModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content border-0 shadow" style="border-radius: 16px;">
+            <div class="modal-header border-bottom-0 pt-4 pb-3 px-4 px-md-5">
+                <div class="d-flex align-items-center gap-3">
+                    <div class="d-flex align-items-center justify-content-center rounded-circle" style="width: 52px; height: 52px; background: #eff6ff; color: #2563eb;">
+                        <i class="bi bi-person-vcard fs-3"></i>
+                    </div>
+                    <div>
+                        <h4 class="modal-title fw-bold mb-0" id="modalTitle" style="color: #0f172a; letter-spacing: -0.02em;">Edit Employee</h4>
+                        <p class="text-muted mb-0" id="modalSubtitle" style="font-size: 0.85rem; font-weight: 500;">Update employee information and details</p>
+                    </div>
+                </div>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" style="background-color: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 0.6rem; opacity: 1;"></button>
+            </div>
+            <div class="modal-body px-4 px-md-5 pb-4 pt-1">
+                <form id="employeeForm">
+                    <input type="hidden" id="empDbId">
+                    <div class="row g-4">
+                        <div class="col-md-6">
+                            <label class="form-label" style="font-size: 0.7rem; font-weight: 700; text-transform: uppercase; color: #64748b; letter-spacing: 0.5px; margin-bottom: 0.4rem;">Employee ID</label>
+                            <div class="position-relative">
+                                <i class="bi bi-person-badge position-absolute" style="left: 14px; top: 50%; transform: translateY(-50%); color: #2563eb; font-size: 1.15rem;"></i>
+                                <input type="text" class="form-control custom-input" id="empId" required readonly style="background-color: #f8fafc;">
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label" style="font-size: 0.7rem; font-weight: 700; text-transform: uppercase; color: #64748b; letter-spacing: 0.5px; margin-bottom: 0.4rem;">Full Name</label>
+                            <div class="position-relative">
+                                <i class="bi bi-person position-absolute" style="left: 14px; top: 50%; transform: translateY(-50%); color: #2563eb; font-size: 1.15rem;"></i>
+                                <input type="text" class="form-control custom-input" id="empName" required>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label" style="font-size: 0.7rem; font-weight: 700; text-transform: uppercase; color: #64748b; letter-spacing: 0.5px; margin-bottom: 0.4rem;">Email</label>
+                            <div class="position-relative">
+                                <i class="bi bi-envelope position-absolute" style="left: 14px; top: 50%; transform: translateY(-50%); color: #2563eb; font-size: 1.15rem;"></i>
+                                <input type="email" class="form-control custom-input" id="empEmail" required>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label" style="font-size: 0.7rem; font-weight: 700; text-transform: uppercase; color: #64748b; letter-spacing: 0.5px; margin-bottom: 0.4rem;">Phone Number</label>
+                            <div class="position-relative">
+                                <i class="bi bi-telephone position-absolute" style="left: 14px; top: 50%; transform: translateY(-50%); color: #2563eb; font-size: 1.15rem;"></i>
+                                <input type="text" class="form-control custom-input" id="empPhone" required>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label" style="font-size: 0.7rem; font-weight: 700; text-transform: uppercase; color: #64748b; letter-spacing: 0.5px; margin-bottom: 0.4rem;">Department</label>
+                            <div class="position-relative">
+                                <i class="bi bi-building position-absolute" style="left: 14px; top: 50%; transform: translateY(-50%); color: #2563eb; font-size: 1.15rem;"></i>
+                                <input type="text" class="form-control custom-input" id="empDept" required list="deptOptions" style="padding-right: 36px;">
+                                <datalist id="deptOptions">
+                                    <option value="IT">
+                                    <option value="HR">
+                                    <option value="Finance">
+                                    <option value="Marketing">
+                                    <option value="Design">
+                                    <option value="Game">
+                                </datalist>
+                                <i class="bi bi-chevron-down position-absolute" style="right: 14px; top: 50%; transform: translateY(-50%); color: #64748b; font-size: 0.95rem; pointer-events: none;"></i>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label" style="font-size: 0.7rem; font-weight: 700; text-transform: uppercase; color: #64748b; letter-spacing: 0.5px; margin-bottom: 0.4rem;">Designation</label>
+                            <div class="position-relative">
+                                <i class="bi bi-briefcase position-absolute" style="left: 14px; top: 50%; transform: translateY(-50%); color: #2563eb; font-size: 1.15rem;"></i>
+                                <input type="text" class="form-control custom-input" id="empDesig" required list="desigOptions" style="padding-right: 36px;">
+                                <datalist id="desigOptions">
+                                    <option value="Software Developer">
+                                    <option value="Designer">
+                                    <option value="Manager">
+                                    <option value="Executive">
+                                </datalist>
+                                <i class="bi bi-chevron-down position-absolute" style="right: 14px; top: 50%; transform: translateY(-50%); color: #64748b; font-size: 0.95rem; pointer-events: none;"></i>
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <label class="form-label" style="font-size: 0.7rem; font-weight: 700; text-transform: uppercase; color: #64748b; letter-spacing: 0.5px; margin-bottom: 0.4rem;">Salary</label>
+                            <div class="position-relative">
+                                <div class="position-absolute d-flex align-items-center justify-content-center rounded-circle" style="left: 10px; top: 50%; transform: translateY(-50%); width: 24px; height: 24px; background: #eff6ff; color: #2563eb; font-weight: 800; font-size: 0.8rem;">₹</div>
+                                <input type="number" class="form-control custom-input" id="empSalary" required style="padding-left: 44px !important;">
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <hr class="my-4" style="opacity: 0.08;">
+                    
+                    <div class="d-flex justify-content-end gap-3">
+                        <button type="button" class="btn btn-light d-flex align-items-center gap-2" data-bs-dismiss="modal" style="border: 1px solid #e2e8f0; border-radius: 10px; padding: 0.55rem 1.4rem; font-weight: 600; color: #475569; background: #ffffff;">
+                            <i class="bi bi-x fs-5" style="margin-left: -4px;"></i> Cancel
+                        </button>
+                        <button type="submit" class="btn btn-primary d-flex align-items-center gap-2" style="border-radius: 10px; padding: 0.55rem 1.4rem; font-weight: 600; background: #2563eb; border: none; box-shadow: 0 4px 12px rgba(37,99,235,0.25);">
+                            <i class="bi bi-floppy"></i> Save Employee
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Filter Sidebar (Offcanvas) -->
+<div class="offcanvas offcanvas-end border-0 shadow" tabindex="-1" id="filterSidebar" aria-labelledby="filterSidebarLabel" style="width: 350px;">
+    <div class="offcanvas-header border-bottom px-4 py-3">
+        <h5 class="offcanvas-title fw-bold text-dark" id="filterSidebarLabel" style="font-size: 1.15rem;">Filter Employees</h5>
+        <button type="button" class="btn-close shadow-none" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+    </div>
+    <div class="offcanvas-body px-4 py-4" style="background-color: #f8fafc;">
+        <form id="filterForm">
+            <!-- Department -->
+            <div class="mb-4">
+                <label for="filterDepartment" class="form-label text-secondary fw-semibold mb-2" style="font-size: 0.85rem;">DEPARTMENT</label>
+                <select class="form-select custom-input" id="filterDepartment" style="padding-left: 1rem !important;">
+                    <option value="">Select department</option>
+                    <!-- Options populated by JS -->
+                </select>
+            </div>
+            
+            <!-- Designation -->
+            <div class="mb-4">
+                <label for="filterDesignation" class="form-label text-secondary fw-semibold mb-2" style="font-size: 0.85rem;">DESIGNATION</label>
+                <select class="form-select custom-input" id="filterDesignation" style="padding-left: 1rem !important;">
+                    <option value="">Select designation</option>
+                    <!-- Options populated by JS -->
+                </select>
+            </div>
+            
+            <!-- Buttons -->
+            <div class="d-flex gap-3 mt-5">
+                <button type="button" class="btn btn-outline-secondary w-50 fw-semibold" style="border-radius: 10px; padding: 0.6rem;" onclick="resetFilterForm()">
+                    <i class="bi bi-arrow-counterclockwise"></i> Reset
+                </button>
+                <button type="button" class="btn btn-primary w-50 fw-semibold" style="border-radius: 10px; padding: 0.6rem; background-color: #2563eb; border-color: #2563eb;" onclick="applyFilters()">
+                    <i class="bi bi-funnel"></i> Apply Filter
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<!-- SweetAlert2 -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<!-- AOS Animation JS -->
+<script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+<script src="js/api.js"></script>
+<script src="js/admin.js"></script>
+<script>
+    AOS.init({ once: true });
+</script>
+</body>
+</html>

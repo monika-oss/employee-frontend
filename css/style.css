@@ -1,0 +1,399 @@
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@300;400;500;600&display=swap');
+
+:root {
+    --bg-base: #f8fafc; /* Cool White */
+    --surface-1: #ffffff;
+    --surface-2: #ffffff;
+    --border-color: rgba(37, 99, 235, 0.1);
+    --text-primary: #0f172a;
+    --text-secondary: #475569;
+    
+    --accent-color: #2563eb; /* Modern Blue */
+    --accent-light: #eff6ff; 
+    --accent-glow: rgba(37, 99, 235, 0.25);
+    --accent-gradient: linear-gradient(135deg, #1d4ed8 0%, #3b82f6 100%);
+    
+    --bs-primary: #2563eb;
+    --bs-primary-rgb: 37, 99, 235;
+    
+    --radius-sm: 12px;
+    --radius-md: 16px;
+    --radius-lg: 24px;
+    --radius-pill: 9999px;
+}
+
+body {
+    font-family: 'Inter', sans-serif;
+    background: linear-gradient(135deg, #ffffff 0%, #f1f5f9 100%); /* Clean White Background */
+    background-attachment: fixed;
+    color: var(--text-primary);
+    -webkit-font-smoothing: antialiased;
+    min-height: 100vh;
+    margin: 0;
+    overflow-x: hidden;
+}
+
+/* Bootstrap Overrides for New Theme */
+.text-primary { color: var(--accent-color) !important; }
+.bg-primary { background-color: var(--accent-color) !important; }
+.btn-primary { 
+    background-color: var(--accent-color); 
+    border-color: var(--accent-color); 
+    color: white;
+}
+.btn-primary:hover { 
+    background-color: #1e40af; /* Darker Blue */
+    border-color: #1e40af; 
+}
+
+/* Clean Blue & White Ambient Glow */
+body::before, body::after {
+    content: '';
+    position: fixed;
+    width: 80vw;
+    height: 80vw;
+    border-radius: 50%;
+    z-index: -1;
+    filter: blur(100px);
+    opacity: 0.8;
+}
+body::before {
+    background: radial-gradient(circle, rgba(59, 130, 246, 0.15) 0%, transparent 70%); /* Soft Blue glow */
+    top: -20%;
+    left: -10%;
+}
+body::after {
+    background: radial-gradient(circle, rgba(29, 78, 216, 0.1) 0%, transparent 70%); /* Deep Blue glow */
+    bottom: -20%;
+    right: -10%;
+}
+
+h1, h2, h3, h4, h5, h6, .navbar-brand {
+    font-family: 'Space Grotesk', sans-serif;
+    letter-spacing: -0.04em;
+    color: var(--text-primary);
+}
+
+/* Glassmorphism Surface Cards */
+.card, .table-container {
+    background: rgba(255, 255, 255, 0.65); /* More transparent */
+    backdrop-filter: blur(30px);
+    -webkit-backdrop-filter: blur(30px);
+    border: 1px solid rgba(255, 255, 255, 0.9); /* Frosted white edge */
+    border-radius: var(--radius-md);
+    box-shadow: 0 15px 35px rgba(99, 102, 241, 0.08), inset 0 0 0 1px rgba(255, 255, 255, 0.5); /* Indigo shadow and inner glow */
+    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    color: var(--text-primary);
+}
+
+.table-container { 
+    padding: 0; 
+    overflow: hidden;
+}
+
+.card:hover, .table-container:hover {
+    background: rgba(255, 255, 255, 0.75);
+    box-shadow: 0 20px 45px rgba(99, 102, 241, 0.12), inset 0 0 0 1px rgba(255, 255, 255, 0.6);
+    transform: translateY(-2px);
+}
+
+.card-header {
+    background: transparent;
+    border-bottom: 1px solid var(--border-color);
+    padding: 1.5rem 2rem;
+}
+
+/* Vibrant Buttons */
+.btn-primary {
+    background: var(--accent-gradient);
+    border: none;
+    border-radius: var(--radius-pill);
+    padding: 0.75rem 1.5rem;
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 600;
+    color: #fff;
+    box-shadow: 0 10px 20px var(--accent-glow);
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-size: 0.85rem;
+}
+
+.btn-primary:hover {
+    background: linear-gradient(135deg, #4f46e5 0%, #6366f1 100%);
+    box-shadow: 0 15px 30px rgba(99, 102, 241, 0.4);
+    transform: translateY(-2px);
+    color: #fff;
+}
+
+.btn-outline-danger {
+    border: 1px solid rgba(225, 29, 72, 0.2);
+    color: #e11d48;
+    border-radius: var(--radius-pill);
+    background: transparent;
+    transition: all 0.3s;
+}
+.btn-outline-danger:hover {
+    background: #fff1f2;
+    color: #be123c;
+    border-color: #be123c;
+}
+
+/* Custom View Toggle (Pill Switch) */
+.custom-toggle {
+    background: #ffffff;
+    border-radius: 50px;
+    padding: 6px;
+    display: inline-flex;
+    align-items: center;
+    border: 1px solid var(--border-color);
+}
+.toggle-btn {
+    border: none;
+    background: transparent;
+    border-radius: 50px;
+    width: 48px;
+    height: 38px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #475569;
+    font-size: 1.15rem;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    cursor: pointer;
+}
+.toggle-btn.active {
+    background: var(--accent-color);
+    color: #ffffff;
+    box-shadow: 0 4px 12px var(--accent-glow);
+}
+.toggle-btn:hover:not(.active) {
+    color: var(--text-primary);
+}
+
+/* Outlined Circular Action Buttons */
+.btn-action {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid #e2e8f0;
+    background: #fff;
+    transition: all 0.2s;
+    color: #64748b;
+}
+.btn-action:hover {
+    background: #f8fafc;
+    color: var(--accent-color);
+    border-color: var(--accent-color);
+}
+.btn-action.delete {
+    color: #ef4444;
+}
+.btn-action.delete:hover {
+    background: #fef2f2;
+    border-color: #ef4444;
+    color: #ef4444;
+}
+
+/* Bright Inputs */
+.form-control, .form-select {
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: var(--radius-sm);
+    color: var(--text-primary);
+    padding: 0.8rem 1.25rem;
+    font-family: 'Inter', sans-serif;
+    box-shadow: inset 0 2px 4px rgba(0,0,0,0.02);
+}
+.form-control:focus, .form-select:focus {
+    background: #ffffff;
+    border-color: var(--accent-color);
+    box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.15); /* Blue focus ring */
+    color: var(--text-primary);
+}
+.form-control::placeholder {
+    color: #94a3b8;
+}
+
+.form-label {
+    color: var(--text-secondary);
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    font-weight: 600;
+}
+
+/* Elevated Distinct Navbar in Blue */
+.navbar {
+    background: var(--accent-gradient) !important; /* Blue Gradient */
+    border-bottom: none;
+    box-shadow: 0 10px 30px rgba(37, 99, 235, 0.25); /* Blue shadow */
+    padding: 1rem 0;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+/* Ensure text inside dark navbar is readable */
+.navbar .text-dark,
+.navbar .text-muted {
+    color: rgba(255, 255, 255, 0.8) !important;
+}
+
+.navbar .fw-bolder.tracking-tight {
+    background: none !important;
+    -webkit-text-fill-color: #ffffff !important;
+    color: #ffffff !important;
+}
+
+/* Ensure Logo contrasts well */
+.navbar .bg-primary.text-white {
+    background: #ffffff !important;
+    color: var(--accent-color) !important;
+}
+
+/* Navbar Logout Button */
+.navbar .btn-action.delete {
+    background: rgba(255, 255, 255, 0.15) !important;
+    color: #ffffff !important;
+}
+.navbar .btn-action.delete:hover {
+    background: rgba(255, 255, 255, 0.25) !important;
+    color: #ffffff !important;
+}
+.navbar-brand {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--text-primary) !important;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+/* Sleek Table */
+.table {
+    margin-bottom: 0;
+}
+.table thead {
+    background: var(--accent-gradient);
+}
+.table thead th {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: #ffffff;
+    border: none;
+    padding: 1.2rem 1.5rem;
+    background: transparent;
+}
+.table td {
+    padding: 1.25rem 1rem;
+    vertical-align: middle;
+    border-bottom: 1px solid var(--border-color);
+    background: transparent;
+}
+
+/* Custom Badges */
+.badge-custom {
+    background: #e0e7ff;
+    color: #4f46e5;
+    border: 1px solid #c7d2fe;
+    padding: 0.5em 1em;
+    border-radius: var(--radius-pill);
+    font-weight: 600;
+    letter-spacing: 0.5px;
+}
+
+/* Avatar Circle */
+.avatar-circle {
+    width: 44px;
+    height: 44px;
+    background: var(--surface-2);
+    border: 1px solid #e2e8f0;
+    color: var(--accent-color);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 700;
+    font-size: 1.1rem;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+}
+
+/* Card View Grid */
+.employee-card {
+    border-radius: var(--radius-md);
+    border: 1px solid var(--border-color);
+    transition: transform 0.3s;
+}
+.employee-card:hover {
+    transform: translateY(-4px);
+}
+
+/* Login specific */
+.login-container {
+    max-width: 400px;
+    margin: 15vh auto;
+    position: relative;
+    z-index: 10;
+}
+.login-header h2 {
+    font-size: 3rem;
+    margin-bottom: 0.5rem;
+    background: var(--accent-gradient);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+/* Modal Theme */
+.modal-content {
+    background: #ffffff;
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-lg);
+    box-shadow: 0 25px 50px -12px rgba(0,0,0,0.15);
+    color: var(--text-primary);
+}
+.modal-header {
+    border-bottom: 1px solid var(--border-color);
+    padding: 2rem;
+}
+.modal-title {
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 700;
+}
+.modal-body {
+    padding: 2rem;
+}
+
+/* SweetAlert2 Toast Custom Theme */
+div.swal2-container.swal2-top-end > div.swal2-popup.swal2-toast.theme-toast {
+    box-shadow: 0 10px 25px -5px rgba(37, 99, 235, 0.15), 0 8px 10px -6px rgba(37, 99, 235, 0.1) !important;
+    border-radius: 14px !important;
+    padding: 1rem 1.25rem !important;
+    font-family: 'Inter', sans-serif !important;
+    border: 1px solid rgba(37, 99, 235, 0.1) !important;
+    background: #ffffff !important;
+}
+
+.theme-toast-title {
+    font-size: 0.95rem !important;
+    font-weight: 600 !important;
+    color: #1e293b !important;
+    margin-left: 0.5rem !important;
+}
+
+.theme-toast-icon {
+    transform: scale(0.8) !important;
+    margin: 0 !important;
+}
+
+div.swal2-container.swal2-top-end > div.swal2-popup.swal2-toast .swal2-timer-progress-bar {
+    background: linear-gradient(135deg, #2563eb, #3b82f6) !important;
+    height: 4px !important;
+}

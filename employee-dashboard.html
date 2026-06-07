@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Employee Dashboard - EMS</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+    <!-- AOS Animation CSS -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css?v=2">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
+        
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif !important;
+            background: #f4f7fa !important;
+            min-height: 100vh;
+            position: relative;
+            overflow-x: hidden;
+        }
+        
+        /* Hide global background glow elements from style.css */
+        body::before, body::after {
+            display: none !important;
+        }
+        
+        /* Background Decorations matching mockup exactly */
+        .bg-shape {
+            position: absolute;
+            pointer-events: none;
+            z-index: -1;
+        }
+        .bg-circle-tl {
+            top: 8%;
+            left: 3%;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: #dbeafe;
+            opacity: 0.8;
+        }
+        .bg-blob-bl {
+            bottom: -10%;
+            left: -8%;
+            width: 320px;
+            height: 320px;
+            border-radius: 50%;
+            background: #e0f2fe;
+            opacity: 0.5;
+        }
+        .bg-blob-tr {
+            top: -8%;
+            right: -6%;
+            width: 260px;
+            height: 260px;
+            border-radius: 50%;
+            background: #e0f2fe;
+            opacity: 0.5;
+        }
+        .bg-dots {
+            background-image: radial-gradient(#94a3b8 2px, transparent 2px);
+            background-size: 16px 16px;
+            opacity: 0.45;
+        }
+        .bg-dots-left {
+            left: 2%;
+            top: 35%;
+            width: 50px;
+            height: 160px;
+        }
+        .bg-dots-right {
+            right: 2%;
+            top: 50%;
+            width: 50px;
+            height: 160px;
+        }
+        
+        .profile-card {
+            background: #ffffff;
+            border-radius: 24px;
+            box-shadow: 0 20px 50px rgba(99, 102, 241, 0.04), 0 4px 20px rgba(0, 0, 0, 0.01);
+            border: 1px solid rgba(226, 232, 240, 0.8);
+            padding: 3rem;
+            position: relative;
+        }
+        
+        /* Profile Header */
+        .profile-header-container {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 2.25rem;
+            flex-wrap: wrap;
+            gap: 1.5rem;
+        }
+        .profile-header-left {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+        .profile-avatar-wrapper {
+            position: relative;
+            width: 78px;
+            height: 78px;
+        }
+        .profile-avatar {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background: #eff6ff;
+            border: 2px solid #3b82f6;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #3b82f6;
+            font-size: 2.15rem;
+        }
+        .status-dot {
+            position: absolute;
+            bottom: 2px;
+            right: 2px;
+            width: 17px;
+            height: 17px;
+            background-color: #10b981;
+            border: 3px solid #ffffff;
+            border-radius: 50%;
+        }
+        .profile-title-group h2 {
+            font-size: 1.75rem;
+            font-weight: 800;
+            color: #0f172a;
+            margin: 0;
+            letter-spacing: -0.02em;
+        }
+        .profile-title-group p {
+            color: #64748b;
+            font-size: 0.95rem;
+            margin: 0.25rem 0 0 0;
+        }
+        
+        /* Edit button */
+        .btn-edit-profile {
+            background: #2563eb;
+            color: #ffffff;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            font-weight: 700;
+            font-size: 0.9rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(37, 99, 235, 0.2);
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .btn-edit-profile:hover {
+            background: #1d4ed8;
+            box-shadow: 0 6px 20px rgba(37, 99, 235, 0.3);
+            transform: translateY(-1px);
+            color: #ffffff;
+        }
+        
+        /* Detail Grid */
+        .detail-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 2.25rem;
+            margin-bottom: 2.25rem;
+        }
+        @media (max-width: 576px) {
+            .detail-grid {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+        }
+        .detail-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        .detail-icon-badge {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: #eff6ff;
+            color: #2563eb;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+        }
+        .detail-info-group {
+            display: flex;
+            flex-direction: column;
+        }
+        .detail-label {
+            font-size: 0.75rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            color: #94a3b8;
+            margin: 0 0 0.15rem 0;
+        }
+        .detail-val-blue {
+            font-size: 1.15rem;
+            font-weight: 800;
+            color: #2563eb;
+            margin: 0;
+        }
+        .detail-val-dark {
+            font-size: 1.15rem;
+            font-weight: 700;
+            color: #0f172a;
+            margin: 0;
+        }
+        
+        /* Modern Inputs */
+        .form-label-custom {
+            font-size: 0.75rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            color: #475569;
+            margin-bottom: 0.5rem;
+            display: block;
+        }
+        .input-group-custom {
+            position: relative;
+        }
+        .input-icon-custom {
+            position: absolute;
+            left: 1.1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #94a3b8;
+            font-size: 1.15rem;
+        }
+        .input-field-custom {
+            width: 100%;
+            background: #f8fafc;
+            border: 1.5px solid #e2e8f0;
+            border-radius: 14px;
+            padding: 0.85rem 1rem 0.85rem 2.85rem;
+            color: #0f172a;
+            font-weight: 600;
+            font-size: 0.95rem;
+            transition: all 0.2s ease;
+        }
+        .input-field-custom:focus {
+            background: #ffffff;
+            border-color: #2563eb;
+            box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.1);
+            outline: none;
+        }
+        .input-field-custom:disabled {
+            background: #f1f5f9;
+            color: #64748b;
+            border-color: #e2e8f0;
+            cursor: not-allowed;
+        }
+        
+        .divider-custom {
+            border: none;
+            height: 1px;
+            background: #e2e8f0;
+            margin: 2.25rem 0;
+        }
+        
+        /* Buttons */
+        .btn-save-custom {
+            background: #10b981;
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 12px;
+            font-weight: 700;
+            box-shadow: 0 4px 15px rgba(16, 185, 129, 0.2);
+            transition: all 0.2s;
+        }
+        .btn-save-custom:hover {
+            background: #059669;
+            box-shadow: 0 6px 20px rgba(16, 185, 129, 0.3);
+            color: white;
+        }
+        .btn-cancel-custom {
+            background: #f1f5f9;
+            color: #475569;
+            border: 1px solid #e2e8f0;
+            padding: 0.75rem 1.5rem;
+            border-radius: 12px;
+            font-weight: 700;
+            transition: all 0.2s;
+        }
+        .btn-cancel-custom:hover {
+            background: #e2e8f0;
+            color: #0f172a;
+        }
+    </style>
+</head>
+<body>
+
+<!-- Decorative Background Shapes & Dot Patterns -->
+<div class="bg-shape bg-circle-tl"></div>
+<div class="bg-shape bg-blob-bl"></div>
+<div class="bg-shape bg-blob-tr"></div>
+<div class="bg-shape bg-dots-left bg-dots"></div>
+<div class="bg-shape bg-dots-right bg-dots"></div>
+
+<nav class="navbar navbar-expand-lg">
+    <div class="container">
+        <a class="navbar-brand" href="#">
+            <div class="d-flex align-items-center gap-2">
+                <div class="bg-primary bg-gradient text-white rounded p-1 shadow-sm d-flex align-items-center justify-content-center" style="width: 32px; height: 32px;">
+                    <i class="bi bi-layers-fill fs-6"></i>
+                </div>
+                <span class="fw-bolder tracking-tight" style="background: var(--accent-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Workspace</span>
+            </div>
+        </a>
+        <div class="d-flex align-items-center gap-3">
+            <div class="d-flex align-items-center gap-2">
+                <div class="avatar-circle shadow-sm" style="width: 38px; height: 38px; font-size: 1rem; background: #fff;">
+                    <i class="bi bi-person"></i>
+                </div>
+                <div class="d-none d-sm-flex flex-column justify-content-center">
+                    <span class="fw-bold lh-1 text-dark" id="userNameDisplay" style="font-size: 0.9rem;">Employee</span>
+                    <span class="text-muted lh-1 mt-1" style="font-size: 0.75rem; font-weight: 500;">Team Member</span>
+                </div>
+            </div>
+            <div class="vr mx-1" style="opacity: 0.1;"></div>
+            <button class="btn btn-action delete border-0 bg-white shadow-sm" id="logoutBtn" title="Logout" onclick="logout()">
+                <i class="bi bi-box-arrow-right"></i>
+            </button>
+        </div>
+    </div>
+</nav>
+
+<div class="container mb-5 mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">            
+            <div class="profile-card border-0" data-aos="zoom-in" data-aos-delay="200" data-aos-duration="800">
+                <form id="profileForm">
+                    <!-- Profile Header Container -->
+                    <div class="profile-header-container">
+                        <div class="profile-header-left">
+                            <div class="profile-avatar-wrapper">
+                                <div class="profile-avatar">
+                                    <i class="bi bi-person"></i>
+                                </div>
+                                <div class="status-dot"></div>
+                            </div>
+                            <div class="profile-title-group">
+                                <h2>My Profile</h2>
+                                <p>View and manage your personal information</p>
+                            </div>
+                        </div>
+                        <button type="button" class="btn-edit-profile" id="editProfileBtn">
+                            <i class="bi bi-pencil"></i> Edit Profile
+                        </button>
+                    </div>
+
+                    <!-- Information Grid (2x2) -->
+                    <div class="detail-grid">
+                        <div class="detail-item">
+                            <div class="detail-icon-badge">
+                                <i class="bi bi-person-vcard"></i>
+                            </div>
+                            <div class="detail-info-group">
+                                <span class="detail-label">Employee ID</span>
+                                <h3 class="detail-val-blue" id="displayEmpId">-</h3>
+                            </div>
+                        </div>
+
+                        <div class="detail-item">
+                            <div class="detail-icon-badge">
+                                <i class="bi bi-building"></i>
+                            </div>
+                            <div class="detail-info-group">
+                                <span class="detail-label">Department</span>
+                                <h3 class="detail-val-blue" id="displayDept">-</h3>
+                            </div>
+                        </div>
+
+                        <div class="detail-item">
+                            <div class="detail-icon-badge">
+                                <i class="bi bi-briefcase"></i>
+                            </div>
+                            <div class="detail-info-group">
+                                <span class="detail-label">Designation</span>
+                                <h3 class="detail-val-dark" id="displayDesig">-</h3>
+                            </div>
+                        </div>
+
+                        <div class="detail-item">
+                            <div class="detail-icon-badge">
+                                <i class="bi bi-envelope"></i>
+                            </div>
+                            <div class="detail-info-group">
+                                <span class="detail-label">Email</span>
+                                <h3 class="detail-val-dark" id="displayEmail">-</h3>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="divider-custom"></div>
+
+                    <!-- Editable Fields Section -->
+                    <div class="row g-4">
+                        <div class="col-md-6">
+                            <label class="form-label-custom">Full Name</label>
+                            <div class="input-group-custom">
+                                <i class="bi bi-person input-icon-custom"></i>
+                                <input type="text" class="input-field-custom" id="profileName" disabled required placeholder="Enter Full Name">
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label-custom">Phone Number</label>
+                            <div class="input-group-custom">
+                                <i class="bi bi-telephone input-icon-custom"></i>
+                                <input type="text" class="input-field-custom" id="profilePhone" disabled required placeholder="Enter Phone Number">
+                            </div>
+                        </div>
+
+                        <div class="col-12 mt-4 d-none" id="saveActions">
+                            <button type="submit" class="btn-save-custom me-2">Save Changes</button>
+                            <button type="button" class="btn-cancel-custom" id="cancelEditBtn">Cancel</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<!-- AOS Animation JS -->
+<script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="js/api.js"></script>
+<script src="js/employee.js"></script>
+<script>
+    AOS.init({ once: true });
+</script>
+</body>
+</html>

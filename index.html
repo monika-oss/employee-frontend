@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Employee Management System</title>
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+    <!-- AOS Animation CSS -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="css/style.css?v=3">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap');
+        
+        body { 
+            margin: 0; 
+            padding: 0; 
+            min-height: 100vh; 
+            overflow-x: hidden; 
+            background: #f8fafc; 
+            font-family: 'Plus Jakarta Sans', sans-serif;
+        }
+        
+        .split-layout { display: flex; min-height: 100vh; }
+        
+        /* Left Branding Panel */
+        .brand-panel {
+            flex: 1;
+            background: linear-gradient(135deg, #0f172a 0%, #1e3a8a 50%, #2563eb 100%);
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            padding: 4.5rem;
+            color: white;
+        }
+        
+        /* Premium Glow Effects */
+        .brand-panel::before {
+            content: ''; 
+            position: absolute; 
+            width: 600px; 
+            height: 600px; 
+            background: radial-gradient(circle, rgba(59, 130, 246, 0.4) 0%, transparent 70%); 
+            top: -10%; 
+            right: -10%; 
+            filter: blur(80px);
+            z-index: 0;
+            animation: glow-pulse-1 10s ease-in-out infinite alternate;
+        }
+        .brand-panel::after {
+            content: ''; 
+            position: absolute; 
+            width: 500px; 
+            height: 500px; 
+            background: radial-gradient(circle, rgba(37, 99, 235, 0.3) 0%, transparent 70%); 
+            bottom: -10%; 
+            left: -10%; 
+            filter: blur(80px);
+            z-index: 0;
+            animation: glow-pulse-2 12s ease-in-out infinite alternate;
+        }
+        
+        .brand-content { position: relative; z-index: 1; flex: 1; display: flex; flex-direction: column; }
+        
+        .brand-logo {
+            display: inline-flex; 
+            align-items: center; 
+            gap: 12px; 
+            font-weight: 700; 
+            font-size: 1.35rem; 
+            letter-spacing: -0.02em;
+            color: #ffffff;
+        }
+        .brand-logo-icon {
+            width: 42px; 
+            height: 42px; 
+            border-radius: 12px; 
+            background: rgba(255,255,255,0.1); 
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            border: 1px solid rgba(255,255,255,0.2);
+            color: #3b82f6;
+            font-size: 1.25rem;
+        }
+        
+        .hero-text { 
+            color: #ffffff !important; 
+            margin-top: 6rem; 
+            font-size: 3.75rem; 
+            font-weight: 800; 
+            line-height: 1.15; 
+            letter-spacing: -0.04em; 
+            margin-bottom: 1.5rem; 
+        }
+        .hero-subtext { 
+            color: rgba(255, 255, 255, 0.75) !important; 
+            font-size: 1.15rem; 
+            max-width: 460px; 
+            line-height: 1.6; 
+            font-weight: 400;
+        }
+        
+        /* Glassmorphism Widgets - Positioned properly on the right to prevent overlap */
+        .widget-active { 
+            position: absolute; 
+            right: 8%; 
+            top: 25%; 
+            background: rgba(255, 255, 255, 0.08); 
+            backdrop-filter: blur(20px); 
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.15); 
+            border-radius: 20px; 
+            padding: 1.5rem 1.8rem; 
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.15); 
+            transform: rotate(3deg); 
+            transition: all 0.3s ease;
+            animation: float-active 6s ease-in-out infinite alternate;
+        }
+        .widget-leave { 
+            position: absolute; 
+            right: 12%; 
+            bottom: 25%; 
+            background: rgba(255, 255, 255, 0.08); 
+            backdrop-filter: blur(20px); 
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.15); 
+            border-radius: 20px; 
+            padding: 1.3rem 1.8rem; 
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.15); 
+            transform: rotate(-3deg); 
+            transition: all 0.3s ease;
+            animation: float-leave 8s ease-in-out infinite alternate;
+        }
+        .widget-active:hover, .widget-leave:hover {
+            transform: scale(1.05) rotate(0deg) !important;
+            background: rgba(255, 255, 255, 0.12);
+            border-color: rgba(255, 255, 255, 0.25);
+        }
+        
+        .widget-label { 
+            font-size: 0.75rem; 
+            font-weight: 700; 
+            letter-spacing: 1px; 
+            text-transform: uppercase; 
+            color: rgba(255, 255, 255, 0.6); 
+            margin-bottom: 0.4rem; 
+            display: block; 
+        }
+        .widget-value { 
+            font-size: 2.5rem; 
+            font-weight: 800; 
+            font-family: 'Space Grotesk', sans-serif;
+            line-height: 1; 
+            margin-bottom: 0.2rem; 
+            color: #ffffff;
+        }
+        .widget-trend { 
+            font-size: 0.8rem; 
+            color: #3b82f6; 
+            font-weight: 600;
+        }
+        .widget-leave .widget-trend {
+            color: #10b981;
+        }
+        
+        /* Keyframe Animations */
+        @keyframes float-active {
+            0% { transform: translateY(0) rotate(3deg); }
+            100% { transform: translateY(-15px) rotate(4deg); }
+        }
+        @keyframes float-leave {
+            0% { transform: translateY(0) rotate(-3deg); }
+            100% { transform: translateY(15px) rotate(-1deg); }
+        }
+        @keyframes glow-pulse-1 {
+            0% { transform: translate(0, 0) scale(1); }
+            100% { transform: translate(-30px, 20px) scale(1.1); }
+        }
+        @keyframes glow-pulse-2 {
+            0% { transform: translate(0, 0) scale(1); }
+            100% { transform: translate(40px, -30px) scale(1.15); }
+        }
+        @keyframes wave {
+            0% { transform: rotate(0.0deg); }
+            10% { transform: rotate(14.0deg); }
+            20% { transform: rotate(-8.0deg); }
+            30% { transform: rotate(14.0deg); }
+            40% { transform: rotate(-4.0deg); }
+            50% { transform: rotate(10.0deg); }
+            60% { transform: rotate(0.0deg); }
+            100% { transform: rotate(0.0deg); }
+        }
+        .wave-emoji {
+            display: inline-block;
+            animation: wave 2.5s infinite;
+            transform-origin: 70% 70%;
+        }
+        
+        /* Right Form Panel */
+        .form-panel {
+            flex: 0 0 540px;
+            background: #ffffff;
+            display: flex;
+            flex-direction: column;
+            padding: 4.5rem;
+            justify-content: center;
+            border-left: 1px solid #f1f5f9;
+        }
+        
+        @media (max-width: 1100px) {
+            .widget-active { right: 4%; top: 20%; }
+            .widget-leave { right: 6%; bottom: 20%; }
+        }
+        
+        @media (max-width: 991px) {
+            .brand-panel { display: none; }
+            .form-panel { flex: 1; padding: 2.5rem 1.5rem; align-items: center; }
+            .form-wrapper { width: 100%; max-width: 400px; }
+        }
+        
+        .portal-badge { 
+            display: inline-flex; 
+            align-items: center; 
+            gap: 8px; 
+            background: #eff6ff; 
+            color: #2563eb; 
+            font-size: 0.75rem; 
+            font-weight: 700; 
+            letter-spacing: 1.5px; 
+            text-transform: uppercase; 
+            padding: 0.5rem 1.2rem; 
+            border-radius: 999px; 
+            margin-bottom: 2rem; 
+        }
+        .portal-badge .dot { width: 6px; height: 6px; background: #2563eb; border-radius: 50%; }
+        
+        .login-title { font-size: 2.25rem; font-weight: 800; color: #0f172a; margin-bottom: 0.5rem; letter-spacing: -0.03em; }
+        .login-subtitle { color: #64748b; font-size: 0.95rem; margin-bottom: 2.5rem; }
+        
+        .form-label { font-weight: 600; color: #334155; font-size: 0.85rem; margin-bottom: 0.5rem; }
+        
+        /* Premium Light Inputs */
+        .login-input { 
+            background: #f8fafc; 
+            border: 1.5px solid #e2e8f0; 
+            color: #0f172a; 
+            padding: 0.85rem 1rem 0.85rem 2.75rem; 
+            border-radius: 12px; 
+            font-weight: 500; 
+            transition: all 0.2s ease;
+        }
+        .login-input:focus { 
+            background: #ffffff; 
+            border-color: #2563eb; 
+            box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.1); 
+            color: #0f172a; 
+        }
+        .login-input::placeholder { color: #94a3b8; }
+        
+        .input-icon { 
+            position: absolute; 
+            left: 1.1rem; 
+            top: 50%; 
+            transform: translateY(-50%); 
+            color: #94a3b8; 
+            font-size: 1.15rem; 
+            transition: color 0.2s ease;
+        }
+        .login-input:focus + .input-icon,
+        .input-wrapper:focus-within .input-icon {
+            color: #2563eb;
+        }
+        .input-wrapper { position: relative; }
+        
+        .forgot-link { color: #64748b; font-size: 0.85rem; font-weight: 500; text-decoration: none; display: inline-block; transition: color 0.2s; }
+        .forgot-link:hover { color: #2563eb; }
+        
+        .btn-submit { 
+            background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%); 
+            color: #ffffff; 
+            font-weight: 700; 
+            padding: 0.95rem; 
+            border-radius: 12px; 
+            border: none;
+            box-shadow: 0 10px 25px rgba(37, 99, 235, 0.2); 
+            transition: all 0.3s ease; 
+            margin-top: 1rem; 
+        }
+        .btn-submit:hover { 
+            transform: translateY(-2px); 
+            box-shadow: 0 15px 30px rgba(37, 99, 235, 0.3); 
+            background: linear-gradient(135deg, #1d4ed8 0%, #1e40af 100%);
+            color: #ffffff;
+        }
+        .btn-submit:active {
+            transform: translateY(0);
+        }
+        
+        .admin-note { 
+            border: 1px solid rgba(37, 99, 235, 0.1); 
+            background: #f8fafc; 
+            border-radius: 14px; 
+            padding: 1.1rem; 
+            margin-top: 2.5rem; 
+            display: flex; 
+            align-items: center; 
+            gap: 12px; 
+            font-size: 0.85rem; 
+            color: #475569; 
+        }
+        .admin-note i { color: #2563eb; font-size: 1.1rem; }
+        .admin-note strong { color: #0f172a; }
+    </style>
+</head>
+<body>
+
+<div class="split-layout">
+    
+    <!-- LEFT PANEL: Branding & Aesthetics -->
+    <div class="brand-panel">
+        <div class="brand-content">
+            <div class="brand-logo" data-aos="fade-down">
+                <div class="brand-logo-icon"><i class="bi bi-layers-fill"></i></div>
+                WorkSpace
+            </div>
+            
+            <h1 class="hero-text" data-aos="fade-up" data-aos-delay="200">Your team,<br>all in one<br>place.</h1>
+            <p class="hero-subtext" data-aos="fade-up" data-aos-delay="300">Manage your workforce, assign roles, and track employee details securely.</p>
+            
+            <div class="widget-active" data-aos="zoom-in" data-aos-delay="500">
+                <span class="widget-label">Total Employees</span>
+                <div class="widget-value">48</div>
+                <div class="widget-trend">Active Members</div>
+            </div>
+            
+            <div class="widget-leave" data-aos="zoom-in" data-aos-delay="600">
+                <span class="widget-label">Departments</span>
+                <div class="widget-value">6</div>
+                <div class="widget-trend">Fully Managed</div>
+            </div>
+            
+            
+        </div>
+    </div>
+    
+    <!-- RIGHT PANEL: Login Form -->
+    <div class="form-panel">
+        <div class="form-wrapper">
+            <div class="portal-badge" data-aos="fade-down">
+                <div class="dot"></div> EMPLOYEE PORTAL
+            </div>
+            
+            <h2 class="login-title" data-aos="fade-up" data-aos-delay="100">Welcome back <img src="https://cdnjs.cloudflare.com/ajax/libs/twemoji/14.0.2/72x72/1f44b.png" class="wave-emoji" style="width: 32px; height: 32px; vertical-align: middle; margin-left: 6px; display: inline-block; transform-origin: 70% 70%;" alt="waving hand"></h2>
+            <p class="login-subtitle" data-aos="fade-up" data-aos-delay="200">Sign in to your account</p>
+            
+            <div id="loginAlert" class="alert alert-danger d-none" role="alert"></div>
+            
+            <form id="loginForm" data-aos="fade-up" data-aos-delay="300">
+                <div class="mb-3">
+                    <label for="email" class="form-label">Email Address</label>
+                    <div class="input-wrapper">
+                        <i class="bi bi-envelope input-icon"></i>
+                        <input type="email" class="form-control login-input" id="email" required placeholder="name@example.com">
+                    </div>
+                </div>
+                
+                <div class="mb-2">
+                    <label for="password" class="form-label">Password</label>
+                    <div class="input-wrapper">
+                        <i class="bi bi-lock input-icon"></i>
+                        <input type="password" class="form-control login-input" id="password" required placeholder="••••••••">
+                    </div>
+                </div>
+                
+                <a href="#" class="forgot-link mb-4">Forgot password?</a>
+                
+                <div class="d-grid">
+                    <button type="submit" class="btn btn-submit">Login <i class="bi bi-arrow-right ms-2"></i></button>
+                </div>
+            </form>
+            
+
+        </div>
+    </div>
+    
+</div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script src="js/api.js"></script>
+    <script src="js/auth.js"></script>
+    <script>
+        AOS.init({ once: true });
+    </script>
+</body>
+</html>
