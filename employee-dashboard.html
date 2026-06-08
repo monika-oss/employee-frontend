@@ -103,6 +103,7 @@
             position: relative;
             width: 78px;
             height: 78px;
+            flex-shrink: 0;
         }
         .profile-avatar {
             width: 100%;
@@ -296,7 +297,132 @@
             background: #e2e8f0;
             color: #0f172a;
         }
+
+        /* Tablet and below */
+        @media (max-width: 991px) {
+            .profile-card {
+                padding: 1.5rem 1.25rem !important;
+                border-radius: 18px !important;
+            }
+            .bg-shape {
+                display: none !important;
+            }
+        }
+
+        /* Mobile: 375px and below */
+        @media (max-width: 575.98px) {
+            .profile-card {
+                padding: 1.25rem 1rem !important;
+                border-radius: 16px !important;
+            }
+
+            /* Header: avatar left, title middle, edit button right — all in one row */
+            .profile-header-container {
+                flex-direction: row !important;
+                align-items: center !important;
+                justify-content: space-between !important;
+                gap: 0.75rem !important;
+                margin-bottom: 1.5rem !important;
+                flex-wrap: nowrap !important;
+            }
+            .profile-header-left {
+                flex-direction: row !important;
+                align-items: center !important;
+                gap: 0.75rem !important;
+                min-width: 0;
+                flex: 1;
+            }
+            .profile-avatar-wrapper {
+                width: 48px !important;
+                height: 48px !important;
+                flex-shrink: 0;
+            }
+            .profile-avatar {
+                border-width: 2px !important;
+            }
+            .profile-avatar i {
+                font-size: 1.4rem !important;
+            }
+            .status-dot {
+                width: 12px !important;
+                height: 12px !important;
+                border-width: 2px !important;
+            }
+            .profile-title-group {
+                min-width: 0;
+            }
+            .profile-title-group h2 {
+                font-size: 1.1rem !important;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+            }
+            .profile-title-group p {
+                display: none !important; /* hide subtitle on very small screens */
+            }
+            .btn-edit-profile {
+                padding: 0.45rem 0.75rem !important;
+                font-size: 0.78rem !important;
+                border-radius: 10px !important;
+                flex-shrink: 0;
+                white-space: nowrap;
+            }
+            .btn-edit-profile .bi {
+                font-size: 0.8rem;
+            }
+
+            /* Detail grid: 1 column on mobile */
+            .detail-grid {
+                grid-template-columns: 1fr !important;
+                gap: 1rem !important;
+                margin-bottom: 1.5rem !important;
+            }
+            .detail-icon-badge {
+                width: 38px !important;
+                height: 38px !important;
+                font-size: 1rem !important;
+            }
+            .detail-val-blue, .detail-val-dark {
+                font-size: 0.95rem !important;
+            }
+            .detail-label {
+                font-size: 0.7rem !important;
+            }
+
+            /* Divider */
+            .divider-custom {
+                margin: 1.25rem 0 !important;
+            }
+
+            /* Input fields */
+            .input-field-custom {
+                padding: 0.7rem 0.9rem 0.7rem 2.4rem !important;
+                font-size: 0.875rem !important;
+            }
+            .input-icon-custom {
+                left: 0.85rem !important;
+                font-size: 1rem !important;
+            }
+            .form-label-custom {
+                font-size: 0.7rem !important;
+            }
+
+            /* Save/Cancel buttons stacked */
+            #saveActions:not(.d-none) {
+                display: flex !important;
+                flex-direction: column !important;
+                gap: 0.6rem !important;
+            }
+            #saveActions button {
+                width: 100% !important;
+                margin: 0 !important;
+                padding: 0.7rem !important;
+                text-align: center;
+                justify-content: center;
+            }
+        }
     </style>
+
 </head>
 <body>
 
@@ -308,7 +434,7 @@
 <div class="bg-shape bg-dots-right bg-dots"></div>
 
 <nav class="navbar navbar-expand-lg">
-    <div class="container">
+    <div class="container-fluid px-3 px-sm-4">
         <a class="navbar-brand" href="#">
             <div class="d-flex align-items-center gap-2">
                 <div class="bg-primary bg-gradient text-white rounded p-1 shadow-sm d-flex align-items-center justify-content-center" style="width: 32px; height: 32px;">
@@ -328,16 +454,16 @@
                 </div>
             </div>
             <div class="vr mx-1" style="opacity: 0.1;"></div>
-            <button class="btn btn-action delete border-0 bg-white shadow-sm" id="logoutBtn" title="Logout" onclick="logout()">
+            <button class="btn btn-action delete border-0" id="logoutBtn" title="Logout" onclick="logout()">
                 <i class="bi bi-box-arrow-right"></i>
             </button>
         </div>
     </div>
 </nav>
 
-<div class="container mb-5 mt-5">
+<div class="container-fluid px-3 px-sm-4 mb-5 mt-4">
     <div class="row justify-content-center">
-        <div class="col-md-8">            
+        <div class="col-12 col-md-10 col-lg-8 col-xl-7">            
             <div class="profile-card border-0" data-aos="zoom-in" data-aos-delay="200" data-aos-duration="800">
                 <form id="profileForm">
                     <!-- Profile Header Container -->

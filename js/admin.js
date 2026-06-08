@@ -15,7 +15,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let employees = [];
     let isEditing = false;
     let editingEmployeeId = null;
-    let currentView = 'list'; // 'list' or 'card'
+    let currentView = window.innerWidth < 992 ? 'card' : 'list'; // 'list' or 'card'
     let currentPage = 1;
     const itemsPerPage = 5;
 
@@ -327,6 +327,15 @@ document.addEventListener('DOMContentLoaded', () => {
     // Toggle logic
     const btnListView = document.getElementById('btnListView');
     const btnCardView = document.getElementById('btnCardView');
+
+    // Set initial view toggle active states
+    if (currentView === 'card') {
+        btnCardView.classList.add('active');
+        btnListView.classList.remove('active');
+    } else {
+        btnListView.classList.add('active');
+        btnCardView.classList.remove('active');
+    }
 
     // Sidebar Filter Logic
     window.activeFilters = {};
