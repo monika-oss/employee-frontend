@@ -90,7 +90,19 @@ document.addEventListener('DOMContentLoaded', () => {
             return; // No changes made, do not show success message
         }
         
+        if (!/^\d{10}$/.test(newPhone)) {
+            showAlert('Please enter a valid 10-digit phone number', 'danger');
+            return;
+        }
+
+        const saveBtn = profileForm.querySelector('.btn-save-custom');
+        const originalText = saveBtn ? saveBtn.innerHTML : 'Save Changes';
+
         try {
+            if (saveBtn) {
+                saveBtn.disabled = true;
+                saveBtn.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Saving...';
+            }
             await apiFetch('/employees/profile/me', {
                 method: 'PUT',
                 body: JSON.stringify({
@@ -104,6 +116,11 @@ document.addEventListener('DOMContentLoaded', () => {
             loadProfile(); // reload to get fresh data
         } catch (error) {
             showAlert(error.message, 'danger');
+        } finally {
+            if (saveBtn) {
+                saveBtn.disabled = false;
+                saveBtn.innerHTML = originalText;
+            }
         }
     });
 

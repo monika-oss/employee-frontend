@@ -611,8 +611,18 @@ document.addEventListener('DOMContentLoaded', () => {
         };
 
         const dbId = document.getElementById('empDbId').value;
+        const saveBtn = employeeForm.querySelector('button[type="submit"]');
+        const originalText = saveBtn.innerHTML;
+
+        if (!/^\d{10}$/.test(empData.phone)) {
+            showAlert('Please enter a valid 10-digit phone number', 'danger');
+            return;
+        }
 
         try {
+            saveBtn.disabled = true;
+            saveBtn.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Saving...';
+
             if (isEditing) {
                 const hasChanges = !originalEditingData ||
                     empData.employee_id !== originalEditingData.employee_id ||
@@ -647,6 +657,9 @@ document.addEventListener('DOMContentLoaded', () => {
             loadEmployees();
         } catch (error) {
             showAlert(error.message, 'danger');
+        } finally {
+            saveBtn.disabled = false;
+            saveBtn.innerHTML = originalText;
         }
     });
 

@@ -86,7 +86,14 @@ window.saveNewPassword = async () => {
         return;
     }
 
+    const saveBtn = document.querySelector('#profileUpdatePasswordView button:first-of-type');
+    const originalText = saveBtn ? saveBtn.innerHTML : 'Save';
+
     try {
+        if (saveBtn) {
+            saveBtn.disabled = true;
+            saveBtn.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Saving...';
+        }
         await apiFetch('/auth/reset-password', {
             method: 'POST',
             body: JSON.stringify({ newPassword: input.value })
@@ -95,11 +102,19 @@ window.saveNewPassword = async () => {
         window.togglePasswordView(false);
     } catch (error) {
         window.showAlert(error.message, 'error');
+    } finally {
+        if (saveBtn) {
+            saveBtn.disabled = false;
+            saveBtn.innerHTML = originalText;
+        }
     }
 };
-window.logout = () => {
-    localStorage.clear();
-    window.location.href = 'index.html';
+window.logout = async () => {
+    const confirmed = await window.showConfirm('Logout?', 'Are you sure you want to logout?');
+    if (confirmed) {
+        localStorage.clear();
+        window.location.href = 'index.html';
+    }
 };
 
 // Global SweetAlert Toast
