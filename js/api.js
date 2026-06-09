@@ -113,6 +113,7 @@ window.logout = async () => {
     const confirmed = await window.showConfirm('Logout?', 'Are you sure you want to logout?');
     if (confirmed) {
         localStorage.clear();
+        localStorage.setItem('logoutSuccess', 'true');
         window.location.href = 'index.html';
     }
 };

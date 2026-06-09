@@ -1,4 +1,11 @@
 document.addEventListener('DOMContentLoaded', () => {
+    if (localStorage.getItem('logoutSuccess') === 'true') {
+        localStorage.removeItem('logoutSuccess');
+        if (window.showAlert) {
+            window.showAlert('Logged out successfully', 'success');
+        }
+    }
+
     // If already logged in, redirect to correct dashboard
     const token = localStorage.getItem('token');
     const role = localStorage.getItem('role');
