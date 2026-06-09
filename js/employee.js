@@ -90,6 +90,14 @@ document.addEventListener('DOMContentLoaded', () => {
             return; // No changes made, do not show success message
         }
         
+        if (newName.length < 3) {
+            showAlert('Name must be at least 3 characters', 'danger');
+            return;
+        }
+        if (!/^[a-zA-Z\s]+$/.test(newName)) {
+            showAlert('Name should contain only letters and spaces', 'danger');
+            return;
+        }
         if (!/^\d{10}$/.test(newPhone)) {
             showAlert('Please enter a valid 10-digit phone number', 'danger');
             return;

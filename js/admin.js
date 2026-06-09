@@ -646,8 +646,32 @@ document.addEventListener('DOMContentLoaded', () => {
         const saveBtn = employeeForm.querySelector('button[type="submit"]');
         const originalText = saveBtn.innerHTML;
 
+        if (empData.name.trim().length < 3) {
+            showAlert('Name must be at least 3 characters', 'danger');
+            return;
+        }
+        if (!/^[a-zA-Z\s]+$/.test(empData.name.trim())) {
+            showAlert('Name should contain only letters and spaces', 'danger');
+            return;
+        }
+        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(empData.email)) {
+            showAlert('Please enter a valid email address', 'danger');
+            return;
+        }
         if (!/^\d{10}$/.test(empData.phone)) {
             showAlert('Please enter a valid 10-digit phone number', 'danger');
+            return;
+        }
+        if (!empData.department) {
+            showAlert('Please select a department', 'danger');
+            return;
+        }
+        if (!empData.designation) {
+            showAlert('Please select a designation', 'danger');
+            return;
+        }
+        if (!empData.salary || isNaN(empData.salary) || Number(empData.salary) <= 0) {
+            showAlert('Please enter a valid positive salary', 'danger');
             return;
         }
 
@@ -770,6 +794,35 @@ document.addEventListener('DOMContentLoaded', () => {
             designation: document.getElementById(`inline_desig_${id}`).value,
             salary: document.getElementById(`inline_salary_${id}`).value
         };
+
+        if (updatedData.name.trim().length < 3) {
+            showAlert('Name must be at least 3 characters', 'danger');
+            return;
+        }
+        if (!/^[a-zA-Z\s]+$/.test(updatedData.name.trim())) {
+            showAlert('Name should contain only letters and spaces', 'danger');
+            return;
+        }
+        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(updatedData.email)) {
+            showAlert('Please enter a valid email address', 'danger');
+            return;
+        }
+        if (!/^\d{10}$/.test(updatedData.phone)) {
+            showAlert('Please enter a valid 10-digit phone number', 'danger');
+            return;
+        }
+        if (!updatedData.department) {
+            showAlert('Please select a department', 'danger');
+            return;
+        }
+        if (!updatedData.designation) {
+            showAlert('Please select a designation', 'danger');
+            return;
+        }
+        if (!updatedData.salary || isNaN(updatedData.salary) || Number(updatedData.salary) <= 0) {
+            showAlert('Please enter a valid positive salary', 'danger');
+            return;
+        }
 
         const hasChanges = 
             updatedData.employee_id !== emp.employee_id ||
