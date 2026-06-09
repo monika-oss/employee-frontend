@@ -82,6 +82,12 @@ document.addEventListener('DOMContentLoaded', () => {
     profileForm.addEventListener('submit', async (e) => {
         e.preventDefault();
         
+        if (!profileForm.checkValidity()) {
+            e.stopPropagation();
+            profileForm.classList.add('was-validated');
+            return;
+        }
+
         const newName = nameInput.value.trim();
         const newPhone = phoneInput.value.trim();
         

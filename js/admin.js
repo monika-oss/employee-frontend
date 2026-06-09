@@ -647,6 +647,12 @@ document.addEventListener('DOMContentLoaded', () => {
     employeeForm.addEventListener('submit', async (e) => {
         e.preventDefault();
         
+        if (!employeeForm.checkValidity()) {
+            e.stopPropagation();
+            employeeForm.classList.add('was-validated');
+            return;
+        }
+
         const empData = {
             employee_id: document.getElementById('empId').value,
             name: document.getElementById('empName').value,
@@ -678,7 +684,7 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
         
-        const isDuplicatePhone = employees.some(e => e.phone === empData.phone && String(e.id) !== dbId);
+        const isDuplicatePhone = employees.some(e => String(e.phone).trim() === empData.phone.trim() && String(e.id) !== dbId);
         if (isDuplicatePhone) {
             showAlert('This phone number is already registered to another employee', 'danger');
             return;
@@ -833,7 +839,7 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
-        const isDuplicatePhone = employees.some(e => e.phone === updatedData.phone && e.id !== id);
+        const isDuplicatePhone = employees.some(e => String(e.phone).trim() === updatedData.phone.trim() && String(e.id) !== String(id));
         if (isDuplicatePhone) {
             showAlert('This phone number is already registered to another employee', 'danger');
             return;
