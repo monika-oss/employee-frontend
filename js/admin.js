@@ -340,7 +340,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (editingEmployeeId === emp.id) {
                     return `
                         <tr style="background-color: #f8fafc;">
-                            <td style="min-width: 100px;"><input type="text" class="form-control form-control-sm" id="inline_empId_${emp.id}" value="${emp.employee_id}" readonly style="background-color: #e2e8f0; border-color: #cbd5e1; color: #64748b; cursor: not-allowed; font-weight: 600;"></td>
+                            <td style="min-width: 100px; vertical-align: middle;">
+                                <span class="fw-bold" style="color: #64748b; font-size: 0.9rem;">${emp.employee_id}</span>
+                            </td>
                             <td style="min-width: 180px;">
                                 <input type="text" class="form-control form-control-sm mb-1" id="inline_name_${emp.id}" value="${emp.name}" placeholder="Name">
                                 <input type="text" class="form-control form-control-sm" id="inline_phone_${emp.id}" value="${emp.phone}" placeholder="Phone">
@@ -805,7 +807,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!emp) return;
 
         const updatedData = {
-            employee_id: document.getElementById(`inline_empId_${id}`).value,
+            employee_id: emp.employee_id,
             name: document.getElementById(`inline_name_${id}`).value,
             email: document.getElementById(`inline_email_${id}`).value,
             phone: document.getElementById(`inline_phone_${id}`).value,
