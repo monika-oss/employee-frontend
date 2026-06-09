@@ -285,7 +285,7 @@ document.addEventListener('DOMContentLoaded', () => {
             cardPaginationContainer.classList.add('d-none');
             
             if (filteredEmployees.length === 0) {
-                tableBody.innerHTML = '<tr><td colspan="6" class="text-center py-4 text-muted">No employees found.</td></tr>';
+                tableBody.innerHTML = '<tr><td colspan="7" class="text-center py-4 text-muted">No employees found.</td></tr>';
                 document.getElementById('paginationInfo').textContent = 'Showing 0 to 0 of 0 employees';
                 document.getElementById('adminPagination').innerHTML = '';
                 return;
@@ -311,6 +311,7 @@ document.addEventListener('DOMContentLoaded', () => {
                                     ${designations.map(d => `<option value="${d}" ${d === emp.designation ? 'selected' : ''}>${d}</option>`).join('')}
                                 </select>
                             </td>
+                            <td style="min-width: 120px;"><input type="number" class="form-control form-control-sm" id="inline_salary_${emp.id}" value="${emp.salary}"></td>
                             <td style="white-space: nowrap;">
                                 <button class="btn-action-circle me-1" onclick="saveInlineEdit(${emp.id})" style="background: #10b981; color: white; border-color: #10b981;" title="Save"><i class="bi bi-check2"></i></button>
                                 <button class="btn-action-circle" onclick="cancelEdit()" style="background: #ef4444; color: white; border-color: #ef4444;" title="Cancel"><i class="bi bi-x-lg"></i></button>
@@ -338,6 +339,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         <td style="color: #475569; font-weight: 500;">${emp.email}</td>
                         <td><span class="badge-dept ${deptClass}">${emp.department}</span></td>
                         <td style="color: #475569; font-weight: 500;">${emp.designation}</td>
+                        <td style="color: #475569; font-weight: 500;">₹${emp.salary}</td>
                         <td style="white-space: nowrap;">
                             <button class="btn-action-circle me-2" onclick="startInlineEdit(${emp.id})"><i class="bi bi-pencil"></i></button>
                             <button class="btn-action-circle delete" onclick="deleteEmployee(${emp.id})"><i class="bi bi-trash"></i></button>
@@ -413,6 +415,12 @@ document.addEventListener('DOMContentLoaded', () => {
                                         <i class="bi bi-telephone" style="font-size: 0.8rem;"></i>
                                     </div>
                                     <span style="color: #334155;" class="text-truncate">${emp.phone}</span>
+                                </div>
+                                <div class="d-flex align-items-center gap-2">
+                                    <div class="d-flex justify-content-center align-items-center rounded flex-shrink-0" style="width: 24px; height: 24px; background-color: #eff6ff; color: #2563eb;">
+                                        <span style="font-size: 0.8rem; font-weight: bold;">₹</span>
+                                    </div>
+                                    <span style="color: #334155;" class="text-truncate">${emp.salary}</span>
                                 </div>
                             </div>
                             
@@ -715,7 +723,7 @@ document.addEventListener('DOMContentLoaded', () => {
             phone: document.getElementById(`inline_phone_${id}`).value,
             department: document.getElementById(`inline_dept_${id}`).value,
             designation: document.getElementById(`inline_desig_${id}`).value,
-            salary: emp.salary // Keep existing salary as it's not in the table
+            salary: document.getElementById(`inline_salary_${id}`).value
         };
 
         const hasChanges = 
@@ -724,7 +732,8 @@ document.addEventListener('DOMContentLoaded', () => {
             updatedData.email !== emp.email ||
             updatedData.phone !== emp.phone ||
             updatedData.department !== emp.department ||
-            updatedData.designation !== emp.designation;
+            updatedData.designation !== emp.designation ||
+            updatedData.salary !== String(emp.salary);
 
         if (!hasChanges) {
             editingEmployeeId = null;
