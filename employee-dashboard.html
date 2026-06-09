@@ -580,14 +580,14 @@
                             <label class="form-label-custom">Full Name</label>
                             <div class="input-group-custom">
                                 <i class="bi bi-person input-icon-custom"></i>
-                                <input type="text" class="input-field-custom" id="profileName" disabled required pattern="^[a-zA-Z\\s]{3,}$" title="Name must be at least 3 characters and contain only letters and spaces" placeholder="Enter Full Name">
+                                <input type="text" class="input-field-custom" id="profileName" disabled required pattern="[a-zA-Z\s]{3,}" title="Name must be at least 3 characters and contain only letters and spaces" placeholder="Enter Full Name">
                             </div>
                         </div>
                         <div class="col-md-6">
                             <label class="form-label-custom">Phone Number</label>
                             <div class="input-group-custom">
                                 <i class="bi bi-telephone input-icon-custom"></i>
-                                <input type="text" class="input-field-custom" id="profilePhone" disabled required pattern="^\\d{10}$" title="Phone number must be exactly 10 digits" placeholder="Enter Phone Number">
+                                <input type="text" class="input-field-custom" id="profilePhone" disabled required pattern="\d{10}" title="Phone number must be exactly 10 digits" placeholder="Enter Phone Number">
                             </div>
                         </div>
 

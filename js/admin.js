@@ -344,8 +344,8 @@ document.addEventListener('DOMContentLoaded', () => {
                                 <span class="fw-bold" style="color: #64748b; font-size: 0.9rem;">${emp.employee_id}</span>
                             </td>
                             <td style="min-width: 180px;">
-                                <input type="text" class="form-control form-control-sm mb-1" id="inline_name_${emp.id}" value="${emp.name}" placeholder="Name" required pattern="^[a-zA-Z\\s]{3,}$" title="Name must be at least 3 characters and contain only letters and spaces">
-                                <input type="text" class="form-control form-control-sm" id="inline_phone_${emp.id}" value="${emp.phone}" placeholder="Phone" required pattern="^\\d{10}$" title="Phone number must be exactly 10 digits">
+                                <input type="text" class="form-control form-control-sm mb-1" id="inline_name_${emp.id}" value="${emp.name}" placeholder="Name" required pattern="[a-zA-Z\s]{3,}" title="Name must be at least 3 characters and contain only letters and spaces">
+                                <input type="text" class="form-control form-control-sm" id="inline_phone_${emp.id}" value="${emp.phone}" placeholder="Phone" required pattern="\d{10}" title="Phone number must be exactly 10 digits">
                             </td>
                             <td style="min-width: 250px;"><input type="email" class="form-control form-control-sm" id="inline_email_${emp.id}" value="${emp.email}"></td>
                             <td style="min-width: 160px;">
@@ -647,9 +647,21 @@ document.addEventListener('DOMContentLoaded', () => {
     employeeForm.addEventListener('submit', async (e) => {
         e.preventDefault();
         
+        const phoneInput = document.getElementById('empPhone');
+        const phoneValue = phoneInput.value.trim();
+        const dbId = document.getElementById('empDbId').value;
+        const isDuplicatePhone = employees.some(e => String(e.phone).trim() === phoneValue && String(e.id) !== dbId);
+
+        if (isDuplicatePhone) {
+            phoneInput.setCustomValidity('This phone number is already registered to another employee');
+        } else {
+            phoneInput.setCustomValidity('');
+        }
+
         if (!employeeForm.checkValidity()) {
             e.stopPropagation();
             employeeForm.classList.add('was-validated');
+            if (isDuplicatePhone) phoneInput.reportValidity();
             return;
         }
 
@@ -684,11 +696,7 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
         
-        const isDuplicatePhone = employees.some(e => String(e.phone).trim() === empData.phone.trim() && String(e.id) !== dbId);
-        if (isDuplicatePhone) {
-            showAlert('This phone number is already registered to another employee', 'danger');
-            return;
-        }
+        // Duplicate check is handled via setCustomValidity
         if (!empData.department) {
             showAlert('Please select a department', 'danger');
             return;
@@ -816,6 +824,13 @@ document.addEventListener('DOMContentLoaded', () => {
         const phoneInput = document.getElementById(`inline_phone_${id}`);
         const emailInput = document.getElementById(`inline_email_${id}`);
 
+        const isDuplicatePhone = employees.some(e => String(e.phone).trim() === phoneInput.value.trim() && String(e.id) !== String(id));
+        if (isDuplicatePhone) {
+            phoneInput.setCustomValidity('This phone number is already registered to another employee');
+        } else {
+            phoneInput.setCustomValidity('');
+        }
+
         if (!nameInput.checkValidity()) {
             nameInput.reportValidity();
             return;
@@ -856,11 +871,7 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
-        const isDuplicatePhone = employees.some(e => String(e.phone).trim() === updatedData.phone.trim() && String(e.id) !== String(id));
-        if (isDuplicatePhone) {
-            showAlert('This phone number is already registered to another employee', 'danger');
-            return;
-        }
+        // Duplicate check is handled via setCustomValidity above
         if (!updatedData.department) {
             showAlert('Please select a department', 'danger');
             return;

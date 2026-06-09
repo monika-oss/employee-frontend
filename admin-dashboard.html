@@ -557,7 +557,7 @@
                             <label class="form-label" style="font-size: 0.7rem; font-weight: 700; text-transform: uppercase; color: #64748b; letter-spacing: 0.5px; margin-bottom: 0.4rem;">Full Name</label>
                             <div class="position-relative">
                                 <i class="bi bi-person position-absolute" style="left: 14px; top: 50%; transform: translateY(-50%); color: #2563eb; font-size: 1.15rem;"></i>
-                                <input type="text" class="form-control custom-input" id="empName" required pattern="^[a-zA-Z\\s]{3,}$" title="Name must be at least 3 characters and contain only letters and spaces">
+                                <input type="text" class="form-control custom-input" id="empName" required pattern="[a-zA-Z\s]{3,}" title="Name must be at least 3 characters and contain only letters and spaces">
                             </div>
                         </div>
                         <div class="col-md-6">
@@ -571,7 +571,7 @@
                             <label class="form-label" style="font-size: 0.7rem; font-weight: 700; text-transform: uppercase; color: #64748b; letter-spacing: 0.5px; margin-bottom: 0.4rem;">Phone Number</label>
                             <div class="position-relative">
                                 <i class="bi bi-telephone position-absolute" style="left: 14px; top: 50%; transform: translateY(-50%); color: #2563eb; font-size: 1.15rem;"></i>
-                                <input type="text" class="form-control custom-input" id="empPhone" required pattern="^\\d{10}$" title="Phone number must be exactly 10 digits">
+                                <input type="text" class="form-control custom-input" id="empPhone" required pattern="\d{10}" title="Phone number must be exactly 10 digits">
                             </div>
                         </div>
                         <div class="col-md-6">
