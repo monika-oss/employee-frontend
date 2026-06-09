@@ -675,7 +675,6 @@ document.addEventListener('DOMContentLoaded', () => {
             salary: document.getElementById('empSalary').value
         };
 
-        const dbId = document.getElementById('empDbId').value;
         const saveBtn = employeeForm.querySelector('button[type="submit"]');
         const originalText = saveBtn.innerHTML;
 
