@@ -5,7 +5,15 @@ document.addEventListener('DOMContentLoaded', () => {
         return;
     }
 
-    document.getElementById('adminName').textContent = localStorage.getItem('userName');
+    const userName = localStorage.getItem('userName') || 'Admin';
+    const adminNameDisplay = document.getElementById('adminName');
+    if (adminNameDisplay) adminNameDisplay.textContent = userName;
+    
+    const dropdownUserName = document.getElementById('dropdownUserName');
+    if (dropdownUserName) dropdownUserName.textContent = userName;
+    
+    const dropdownAvatarCircle = document.getElementById('dropdownAvatarCircle');
+    if (dropdownAvatarCircle && userName) dropdownAvatarCircle.textContent = userName.charAt(0).toUpperCase();
 
     const employeeModal = new bootstrap.Modal(document.getElementById('employeeModal'));
     const employeeForm = document.getElementById('employeeForm');
@@ -15,9 +23,106 @@ document.addEventListener('DOMContentLoaded', () => {
     let employees = [];
     let isEditing = false;
     let editingEmployeeId = null;
+    let originalEditingData = null;
     let currentView = window.innerWidth < 992 ? 'card' : 'list'; // 'list' or 'card'
     let currentPage = 1;
     const itemsPerPage = 5;
+
+    // --- Inline Options Manager Logic ---
+    let departments = JSON.parse(localStorage.getItem('departments')) || ['IT', 'HR', 'Finance', 'Marketing', 'Design', 'Game'];
+    let designations = JSON.parse(localStorage.getItem('designations')) || ['Software Developer', 'Designer', 'Manager', 'Executive'];
+
+    const renderOptionDropdown = (type) => {
+        const list = type === 'dept' ? departments : designations;
+        const menuId = type === 'dept' ? 'deptDropdownMenu' : 'desigDropdownMenu';
+        const inputId = type === 'dept' ? 'newDeptInput' : 'newDesigInput';
+        const btnId = type === 'dept' ? 'addDeptBtn' : 'addDesigBtn';
+        const placeholder = type === 'dept' ? 'New Dept' : 'New Desig';
+        
+        const menu = document.getElementById(menuId);
+        if (!menu) return;
+        
+        let html = '';
+        list.forEach(item => {
+            html += `
+                <li class="dropdown-item d-flex justify-content-between align-items-center rounded mb-1" style="cursor: pointer; font-size: 0.9rem;" onclick="window.selectOption('${type}', '${item.replace(/'/g, "\\'")}')">
+                    <span>${item}</span>
+                    <i class="bi bi-trash text-danger" style="padding: 4px;" title="Delete" onclick="event.stopPropagation(); window.deleteOption('${type}', '${item.replace(/'/g, "\\'")}')"></i>
+                </li>`;
+        });
+        
+        html += `
+            <li><hr class="dropdown-divider"></li>
+            <li class="px-2 pt-1 pb-1" onclick="event.stopPropagation()">
+                <div class="input-group input-group-sm">
+                    <input type="text" class="form-control shadow-none" id="${inputId}" placeholder="${placeholder}" style="border-color: #3B82F6;">
+                    <button class="btn text-white" style="background: linear-gradient(135deg, #3B82F6 0%, #4F46E5 100%); border: none;" type="button" id="${btnId}" onclick="window.addOption('${type}')"><i class="bi bi-plus-lg fw-bold"></i></button>
+                </div>
+            </li>`;
+            
+        menu.innerHTML = html;
+        
+        // Add enter key support
+        setTimeout(() => {
+            const inputEl = document.getElementById(inputId);
+            if (inputEl) {
+                inputEl.addEventListener('keypress', (e) => {
+                    if (e.key === 'Enter') {
+                        e.preventDefault();
+                        window.addOption(type);
+                    }
+                });
+            }
+        }, 0);
+    };
+
+    window.selectOption = (type, val) => {
+        const inputId = type === 'dept' ? 'empDept' : 'empDesig';
+        document.getElementById(inputId).value = val;
+    };
+
+    window.addOption = (type) => {
+        const inputId = type === 'dept' ? 'newDeptInput' : 'newDesigInput';
+        const inputEl = document.getElementById(inputId);
+        const val = inputEl.value.trim();
+        if (!val) return;
+        
+        if (type === 'dept') {
+            if (!departments.includes(val)) {
+                departments.push(val);
+                localStorage.setItem('departments', JSON.stringify(departments));
+            }
+        } else {
+            if (!designations.includes(val)) {
+                designations.push(val);
+                localStorage.setItem('designations', JSON.stringify(designations));
+            }
+        }
+        renderOptionDropdown(type);
+    };
+
+    window.deleteOption = (type, val) => {
+        if (type === 'dept') {
+            departments = departments.filter(d => d !== val);
+            localStorage.setItem('departments', JSON.stringify(departments));
+        } else {
+            designations = designations.filter(d => d !== val);
+            localStorage.setItem('designations', JSON.stringify(designations));
+        }
+        renderOptionDropdown(type);
+        
+        // Clear input if the deleted item was selected
+        const mainInputId = type === 'dept' ? 'empDept' : 'empDesig';
+        const mainInput = document.getElementById(mainInputId);
+        if (mainInput && mainInput.value === val) {
+            mainInput.value = '';
+        }
+    };
+    
+    // Initialize dropdowns
+    renderOptionDropdown('dept');
+    renderOptionDropdown('desig');
+    // --- End Inline Options Manager Logic ---
 
     window.changePage = (page) => {
         currentPage = page;
@@ -196,8 +301,16 @@ document.addEventListener('DOMContentLoaded', () => {
                                 <input type="text" class="form-control form-control-sm" id="inline_phone_${emp.id}" value="${emp.phone}" placeholder="Phone">
                             </td>
                             <td style="min-width: 250px;"><input type="email" class="form-control form-control-sm" id="inline_email_${emp.id}" value="${emp.email}"></td>
-                            <td style="min-width: 160px;"><input type="text" class="form-control form-control-sm" id="inline_dept_${emp.id}" value="${emp.department}"></td>
-                            <td style="min-width: 180px;"><input type="text" class="form-control form-control-sm" id="inline_desig_${emp.id}" value="${emp.designation}"></td>
+                            <td style="min-width: 160px;">
+                                <select class="form-select form-select-sm" id="inline_dept_${emp.id}">
+                                    ${departments.map(d => `<option value="${d}" ${d === emp.department ? 'selected' : ''}>${d}</option>`).join('')}
+                                </select>
+                            </td>
+                            <td style="min-width: 180px;">
+                                <select class="form-select form-select-sm" id="inline_desig_${emp.id}">
+                                    ${designations.map(d => `<option value="${d}" ${d === emp.designation ? 'selected' : ''}>${d}</option>`).join('')}
+                                </select>
+                            </td>
                             <td style="white-space: nowrap;">
                                 <button class="btn-action-circle me-1" onclick="saveInlineEdit(${emp.id})" style="background: #10b981; color: white; border-color: #10b981;" title="Save"><i class="bi bi-check2"></i></button>
                                 <button class="btn-action-circle" onclick="cancelEdit()" style="background: #ef4444; color: white; border-color: #ef4444;" title="Cancel"><i class="bi bi-x-lg"></i></button>
@@ -446,12 +559,14 @@ document.addEventListener('DOMContentLoaded', () => {
     const resetFormState = () => {
         const inputs = document.querySelectorAll('#employeeForm .form-control');
         inputs.forEach(input => {
-            if (input.id !== 'empId') input.removeAttribute('readonly');
+            if (input.id !== 'empId' && input.id !== 'empDept' && input.id !== 'empDesig') {
+                input.removeAttribute('readonly');
+            }
         });
         const saveBtn = document.querySelector('#employeeForm button[type="submit"]');
         saveBtn.classList.remove('d-none');
         saveBtn.classList.add('d-flex');
-        document.querySelector('#employeeForm button[data-bs-dismiss="modal"]').innerHTML = '<i class="bi bi-x fs-5" style="margin-left: -4px;"></i> Cancel';
+        document.querySelector('#employeeForm button[data-bs-dismiss="modal"]').innerHTML = 'Cancel';
     };
 
     document.getElementById('addEmpBtn').addEventListener('click', () => {
@@ -491,11 +606,27 @@ document.addEventListener('DOMContentLoaded', () => {
 
         try {
             if (isEditing) {
+                const hasChanges = !originalEditingData ||
+                    empData.employee_id !== originalEditingData.employee_id ||
+                    empData.name !== originalEditingData.name ||
+                    empData.email !== originalEditingData.email ||
+                    empData.phone !== originalEditingData.phone ||
+                    empData.department !== originalEditingData.department ||
+                    empData.designation !== originalEditingData.designation ||
+                    empData.salary !== String(originalEditingData.salary);
+
+                if (!hasChanges) {
+                    employeeModal.hide();
+                    return; // No changes made
+                }
+
                 await apiFetch(`/employees/${dbId}`, {
                     method: 'PUT',
                     body: JSON.stringify(empData)
                 });
+                employeeModal.hide();
                 showAlert('Employee updated successfully');
+                loadEmployees();
             } else {
                 await apiFetch('/employees', {
                     method: 'POST',
@@ -515,6 +646,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const emp = employees.find(e => e.id === id);
         if (emp) {
             isEditing = true;
+            originalEditingData = { ...emp };
             document.getElementById('empDbId').value = emp.id;
             document.getElementById('empId').value = emp.employee_id;
             document.getElementById('empName').value = emp.name;
@@ -556,7 +688,7 @@ document.addEventListener('DOMContentLoaded', () => {
             saveBtn.classList.remove('d-flex');
             saveBtn.classList.add('d-none');
             
-            document.querySelector('#employeeForm button[data-bs-dismiss="modal"]').innerHTML = '<i class="bi bi-x fs-5" style="margin-left: -4px;"></i> Close';
+            document.querySelector('#employeeForm button[data-bs-dismiss="modal"]').innerHTML = 'Close';
             
             employeeModal.show();
         }
@@ -585,6 +717,20 @@ document.addEventListener('DOMContentLoaded', () => {
             designation: document.getElementById(`inline_desig_${id}`).value,
             salary: emp.salary // Keep existing salary as it's not in the table
         };
+
+        const hasChanges = 
+            updatedData.employee_id !== emp.employee_id ||
+            updatedData.name !== emp.name ||
+            updatedData.email !== emp.email ||
+            updatedData.phone !== emp.phone ||
+            updatedData.department !== emp.department ||
+            updatedData.designation !== emp.designation;
+
+        if (!hasChanges) {
+            editingEmployeeId = null;
+            renderEmployees();
+            return;
+        }
 
         try {
             await apiFetch(`/employees/${id}`, {

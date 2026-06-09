@@ -260,6 +260,15 @@
             border-color: #e2e8f0;
             cursor: not-allowed;
         }
+        @keyframes highlightPulse {
+            0% { box-shadow: 0 0 0 0 rgba(37, 99, 235, 0.4); border-color: #3B82F6; }
+            70% { box-shadow: 0 0 0 10px rgba(37, 99, 235, 0); border-color: #3B82F6; }
+            100% { box-shadow: 0 0 0 0 rgba(37, 99, 235, 0); }
+        }
+        .highlight-pulse {
+            animation: highlightPulse 1.5s ease-out;
+            background: #ffffff !important;
+        }
         
         .divider-custom {
             border: none;
@@ -270,18 +279,18 @@
         
         /* Buttons */
         .btn-save-custom {
-            background: #10b981;
+            background: linear-gradient(135deg, #3B82F6 0%, #4F46E5 100%);
             color: white;
             border: none;
             padding: 0.75rem 1.5rem;
             border-radius: 12px;
             font-weight: 700;
-            box-shadow: 0 4px 15px rgba(16, 185, 129, 0.2);
+            box-shadow: 0 4px 15px rgba(59, 130, 246, 0.25);
             transition: all 0.2s;
         }
         .btn-save-custom:hover {
-            background: #059669;
-            box-shadow: 0 6px 20px rgba(16, 185, 129, 0.3);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(79, 70, 229, 0.35);
             color: white;
         }
         .btn-cancel-custom {
@@ -444,19 +453,51 @@
             </div>
         </a>
         <div class="d-flex align-items-center gap-3">
-            <div class="d-flex align-items-center gap-2">
-                <div class="avatar-circle shadow-sm" style="width: 38px; height: 38px; font-size: 1rem; background: #fff;">
-                    <i class="bi bi-person"></i>
+            <div class="dropdown">
+                <div class="d-flex align-items-center gap-2 profile-clickable" role="button" data-bs-toggle="dropdown" aria-expanded="false" title="Profile Options" style="cursor: pointer; transition: opacity 0.2s;" onmouseover="this.style.opacity='0.8'" onmouseout="this.style.opacity='1'">
+                    <div class="avatar-circle shadow-sm" style="width: 38px; height: 38px; font-size: 1rem; background: #fff;">
+                        <i class="bi bi-person"></i>
+                    </div>
+                    <div class="d-none d-sm-flex flex-column justify-content-center">
+                        <span class="fw-bold lh-1 text-dark" id="userNameDisplay" style="font-size: 0.9rem;">Employee</span>
+                        <span class="text-muted lh-1 mt-1" style="font-size: 0.75rem; font-weight: 500;">Team Member</span>
+                    </div>
                 </div>
-                <div class="d-none d-sm-flex flex-column justify-content-center">
-                    <span class="fw-bold lh-1 text-dark" id="userNameDisplay" style="font-size: 0.9rem;">Employee</span>
-                    <span class="text-muted lh-1 mt-1" style="font-size: 0.75rem; font-weight: 500;">Team Member</span>
+                <div class="dropdown-menu dropdown-menu-end border-0 mt-2 p-3 text-center" style="border-radius: 12px; min-width: 220px; box-shadow: 0 10px 30px rgba(0,0,0,0.1) !important;" onclick="event.stopPropagation()">
+                    <div class="d-flex justify-content-center mb-2">
+                        <div id="dropdownAvatarCircle" class="rounded-circle d-flex align-items-center justify-content-center text-white shadow-sm" style="width: 50px; height: 50px; background: linear-gradient(135deg, #3B82F6 0%, #4F46E5 100%); font-size: 1.5rem; font-weight: 600;">
+                            E
+                        </div>
+                    </div>
+                    <h6 id="dropdownUserName" class="fw-bold mb-3" style="color: #1e293b;">Employee</h6>
+                    
+                    <div id="profileDefaultView">
+                        <div style="height: 1px; background: #f1f5f9; margin: 10px 0;"></div>
+                        <button class="btn w-100 fw-bold text-white mb-2 mt-2" style="background: linear-gradient(135deg, #3B82F6 0%, #4F46E5 100%); border-radius: 8px; padding: 0.5rem; font-size: 0.85rem; border: none; transition: transform 0.2s;" onmouseover="this.style.transform='translateY(-1px)'" onmouseout="this.style.transform='translateY(0)'" onclick="togglePasswordView(true)">
+                            <i class="bi bi-lock me-1"></i> Update Password
+                        </button>
+                        
+                        <div style="height: 1px; background: #f1f5f9; margin: 10px 0;"></div>
+                        
+                        <button class="btn w-100 fw-bold" style="background: transparent; color: #ef4444; border-radius: 8px; padding: 0.5rem; font-size: 0.85rem; border: 1px solid #ef4444; transition: all 0.2s;" onmouseover="this.style.background='#fef2f2'" onmouseout="this.style.background='transparent'" onclick="logout()">
+                            <i class="bi bi-box-arrow-right me-1"></i> Logout
+                        </button>
+                    </div>
+
+                    <div id="profileUpdatePasswordView" class="d-none">
+                        <div style="height: 1px; background: #f1f5f9; margin: 10px 0;"></div>
+                        <input type="password" class="form-control shadow-none mb-3 mt-3" id="newPasswordInput" placeholder="New Password" style="border: 1px solid #3B82F6; border-radius: 6px; font-size: 0.85rem; padding: 0.6rem 12px; color: #64748b;">
+                        <div class="d-flex gap-2">
+                            <button class="btn fw-bold w-50 d-flex align-items-center justify-content-center text-white" style="background: linear-gradient(135deg, #3B82F6 0%, #4F46E5 100%); border-radius: 6px; font-size: 0.85rem; border: none; padding: 0.5rem;" onclick="saveNewPassword()">
+                                Save
+                            </button>
+                            <button class="btn fw-bold w-50 d-flex align-items-center justify-content-center" style="border: 1px solid #ef4444; color: #ef4444; border-radius: 6px; font-size: 0.85rem; background: transparent; padding: 0.5rem;" onclick="togglePasswordView(false)">
+                                Cancel
+                            </button>
+                        </div>
+                    </div>
                 </div>
             </div>
-            <div class="vr mx-1" style="opacity: 0.1;"></div>
-            <button class="btn btn-action delete border-0" id="logoutBtn" title="Logout" onclick="logout()">
-                <i class="bi bi-box-arrow-right"></i>
-            </button>
         </div>
     </div>
 </nav>

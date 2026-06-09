@@ -43,6 +43,60 @@ const apiFetch = async (endpoint, options = {}) => {
     }
 };
 
+window.togglePasswordView = (showPasswordView) => {
+    const defaultView = document.getElementById('profileDefaultView');
+    const pwdView = document.getElementById('profileUpdatePasswordView');
+    
+    if (defaultView && pwdView) {
+        if (showPasswordView) {
+            defaultView.classList.add('d-none');
+            pwdView.classList.remove('d-none');
+        } else {
+            defaultView.classList.remove('d-none');
+            pwdView.classList.add('d-none');
+            const input = document.getElementById('newPasswordInput');
+            if (input) input.value = '';
+        }
+    }
+};
+
+window.toggleNewPasswordVisibility = () => {
+    const input = document.getElementById('newPasswordInput');
+    const icon = document.getElementById('newPasswordIcon');
+    if (input && icon) {
+        if (input.type === 'password') {
+            input.type = 'text';
+            icon.classList.replace('bi-eye-slash', 'bi-eye');
+        } else {
+            input.type = 'password';
+            icon.classList.replace('bi-eye', 'bi-eye-slash');
+        }
+    }
+};
+
+window.saveNewPassword = async () => {
+    const input = document.getElementById('newPasswordInput');
+    if (!input || !input.value) {
+        window.showAlert('Please enter a new password', 'error');
+        return;
+    }
+    
+    if (input.value.length < 6) {
+        window.showAlert('Password must be at least 6 characters', 'error');
+        return;
+    }
+
+    try {
+        await apiFetch('/auth/reset-password', {
+            method: 'POST',
+            body: JSON.stringify({ newPassword: input.value })
+        });        
+        window.showAlert('Password changed successfully!', 'success');
+        window.togglePasswordView(false);
+    } catch (error) {
+        window.showAlert(error.message, 'error');
+    }
+};
 window.logout = () => {
     localStorage.clear();
     window.location.href = 'index.html';

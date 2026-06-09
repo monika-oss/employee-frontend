@@ -371,24 +371,56 @@
             </div>
         </a>
         <div class="d-flex align-items-center gap-3">
-            <div class="d-flex align-items-center gap-2">
-                <div class="avatar-circle shadow-sm" style="width: 38px; height: 38px; font-size: 1rem; background: #fff;">
-                    A
+            <div class="dropdown">
+                <div class="d-flex align-items-center gap-2 profile-clickable" role="button" data-bs-toggle="dropdown" aria-expanded="false" title="Profile Options" style="cursor: pointer; transition: opacity 0.2s;" onmouseover="this.style.opacity='0.8'" onmouseout="this.style.opacity='1'">
+                    <div class="avatar-circle shadow-sm" style="width: 38px; height: 38px; font-size: 1rem; background: #fff;">
+                        A
+                    </div>
+                    <div class="d-none d-sm-flex flex-column justify-content-center">
+                        <span class="fw-bold lh-1 text-dark" id="adminName" style="font-size: 0.9rem;">Admin</span>
+                        <span class="text-muted lh-1 mt-1" style="font-size: 0.75rem; font-weight: 500;">Administrator</span>
+                    </div>
                 </div>
-                <div class="d-none d-sm-flex flex-column justify-content-center">
-                    <span class="fw-bold lh-1 text-dark" id="adminName" style="font-size: 0.9rem;">Admin</span>
-                    <span class="text-muted lh-1 mt-1" style="font-size: 0.75rem; font-weight: 500;">Administrator</span>
+                <div class="dropdown-menu dropdown-menu-end border-0 mt-2 p-3 text-center" style="border-radius: 12px; min-width: 220px; box-shadow: 0 10px 30px rgba(0,0,0,0.1) !important;" onclick="event.stopPropagation()">
+                    <div class="d-flex justify-content-center mb-2">
+                        <div id="dropdownAvatarCircle" class="rounded-circle d-flex align-items-center justify-content-center text-white shadow-sm" style="width: 50px; height: 50px; background: linear-gradient(135deg, #3B82F6 0%, #4F46E5 100%); font-size: 1.5rem; font-weight: 600;">
+                            A
+                        </div>
+                    </div>
+                    <h6 id="dropdownUserName" class="fw-bold mb-3" style="color: #1e293b;">Admin</h6>
+                    
+                    <div id="profileDefaultView">
+                        <div style="height: 1px; background: #f1f5f9; margin: 10px 0;"></div>
+                        <button class="btn w-100 fw-bold text-white mb-2 mt-2" style="background: linear-gradient(135deg, #3B82F6 0%, #4F46E5 100%); border-radius: 8px; padding: 0.5rem; font-size: 0.85rem; border: none; transition: transform 0.2s;" onmouseover="this.style.transform='translateY(-1px)'" onmouseout="this.style.transform='translateY(0)'" onclick="togglePasswordView(true)">
+                            <i class="bi bi-lock me-1"></i> Update Password
+                        </button>
+                        
+                        <div style="height: 1px; background: #f1f5f9; margin: 10px 0;"></div>
+                        
+                        <button class="btn w-100 fw-bold" style="background: transparent; color: #ef4444; border-radius: 8px; padding: 0.5rem; font-size: 0.85rem; border: 1px solid #ef4444; transition: all 0.2s;" onmouseover="this.style.background='#fef2f2'" onmouseout="this.style.background='transparent'" onclick="logout()">
+                            <i class="bi bi-box-arrow-right me-1"></i> Logout
+                        </button>
+                    </div>
+
+                    <div id="profileUpdatePasswordView" class="d-none">
+                        <div style="height: 1px; background: #f1f5f9; margin: 10px 0;"></div>
+                        <input type="password" class="form-control shadow-none mb-3 mt-3" id="newPasswordInput" placeholder="New Password" style="border: 1px solid #3B82F6; border-radius: 6px; font-size: 0.85rem; padding: 0.6rem 12px; color: #64748b;">
+                        <div class="d-flex gap-2">
+                            <button class="btn fw-bold w-50 d-flex align-items-center justify-content-center text-white" style="background: linear-gradient(135deg, #3B82F6 0%, #4F46E5 100%); border-radius: 6px; font-size: 0.85rem; border: none; padding: 0.5rem;" onclick="saveNewPassword()">
+                                Save
+                            </button>
+                            <button class="btn fw-bold w-50 d-flex align-items-center justify-content-center" style="border: 1px solid #ef4444; color: #ef4444; border-radius: 6px; font-size: 0.85rem; background: transparent; padding: 0.5rem;" onclick="togglePasswordView(false)">
+                                Cancel
+                            </button>
+                        </div>
+                    </div>
                 </div>
             </div>
-            <div class="vr mx-1" style="opacity: 0.1;"></div>
-            <button class="btn btn-action delete border-0" id="logoutBtn" title="Logout" onclick="logout()">
-                <i class="bi bi-box-arrow-right"></i>
-            </button>
         </div>
     </div>
 </nav>
 
-<div class="container-fluid px-3 px-sm-4 mb-5">
+<div class="container-fluid px-3 px-sm-4 mb-5 mt-4">
     <div class="d-flex flex-row justify-content-between align-items-center mb-4 mt-2 gap-2" data-aos="fade-right" data-aos-delay="200" style="min-width: 0;">
         <!-- LEFT: icon + title -->
         <div class="d-flex align-items-center gap-2 gap-sm-3" style="min-width: 0; overflow: hidden;">
@@ -540,32 +572,24 @@
                         </div>
                         <div class="col-md-6">
                             <label class="form-label" style="font-size: 0.7rem; font-weight: 700; text-transform: uppercase; color: #64748b; letter-spacing: 0.5px; margin-bottom: 0.4rem;">Department</label>
-                            <div class="position-relative">
-                                <i class="bi bi-building position-absolute" style="left: 14px; top: 50%; transform: translateY(-50%); color: #2563eb; font-size: 1.15rem;"></i>
-                                <input type="text" class="form-control custom-input" id="empDept" required list="deptOptions" style="padding-right: 36px;">
-                                <datalist id="deptOptions">
-                                    <option value="IT">
-                                    <option value="HR">
-                                    <option value="Finance">
-                                    <option value="Marketing">
-                                    <option value="Design">
-                                    <option value="Game">
-                                </datalist>
-                                <i class="bi bi-chevron-down position-absolute" style="right: 14px; top: 50%; transform: translateY(-50%); color: #64748b; font-size: 0.95rem; pointer-events: none;"></i>
+                            <div class="position-relative dropdown custom-dropdown-container">
+                                <i class="bi bi-building position-absolute z-index-1" style="left: 14px; top: 50%; transform: translateY(-50%); color: #2563eb; font-size: 1.15rem; z-index: 4;"></i>
+                                <input type="text" class="form-control custom-input" id="empDept" required readonly data-bs-toggle="dropdown" aria-expanded="false" style="padding-right: 36px; cursor: pointer; background-color: #fff;" placeholder="Select Department">
+                                <i class="bi bi-chevron-down position-absolute z-index-1" style="right: 14px; top: 50%; transform: translateY(-50%); color: #64748b; font-size: 0.95rem; pointer-events: none; z-index: 4;"></i>
+                                <ul class="dropdown-menu w-100 shadow-sm p-2 border-0" id="deptDropdownMenu" style="border-radius: 12px; max-height: 250px; overflow-y: auto; box-shadow: 0 10px 25px -5px rgba(0,0,0,0.1), 0 8px 10px -6px rgba(0,0,0,0.1) !important;">
+                                    <!-- Dynamic options injected here -->
+                                </ul>
                             </div>
                         </div>
                         <div class="col-md-6">
                             <label class="form-label" style="font-size: 0.7rem; font-weight: 700; text-transform: uppercase; color: #64748b; letter-spacing: 0.5px; margin-bottom: 0.4rem;">Designation</label>
-                            <div class="position-relative">
-                                <i class="bi bi-briefcase position-absolute" style="left: 14px; top: 50%; transform: translateY(-50%); color: #2563eb; font-size: 1.15rem;"></i>
-                                <input type="text" class="form-control custom-input" id="empDesig" required list="desigOptions" style="padding-right: 36px;">
-                                <datalist id="desigOptions">
-                                    <option value="Software Developer">
-                                    <option value="Designer">
-                                    <option value="Manager">
-                                    <option value="Executive">
-                                </datalist>
-                                <i class="bi bi-chevron-down position-absolute" style="right: 14px; top: 50%; transform: translateY(-50%); color: #64748b; font-size: 0.95rem; pointer-events: none;"></i>
+                            <div class="position-relative dropdown custom-dropdown-container">
+                                <i class="bi bi-briefcase position-absolute z-index-1" style="left: 14px; top: 50%; transform: translateY(-50%); color: #2563eb; font-size: 1.15rem; z-index: 4;"></i>
+                                <input type="text" class="form-control custom-input" id="empDesig" required readonly data-bs-toggle="dropdown" aria-expanded="false" style="padding-right: 36px; cursor: pointer; background-color: #fff;" placeholder="Select Designation">
+                                <i class="bi bi-chevron-down position-absolute z-index-1" style="right: 14px; top: 50%; transform: translateY(-50%); color: #64748b; font-size: 0.95rem; pointer-events: none; z-index: 4;"></i>
+                                <ul class="dropdown-menu w-100 shadow-sm p-2 border-0" id="desigDropdownMenu" style="border-radius: 12px; max-height: 250px; overflow-y: auto; box-shadow: 0 10px 25px -5px rgba(0,0,0,0.1), 0 8px 10px -6px rgba(0,0,0,0.1) !important;">
+                                    <!-- Dynamic options injected here -->
+                                </ul>
                             </div>
                         </div>
                         <div class="col-md-12">
@@ -580,11 +604,11 @@
                     <hr class="my-4" style="opacity: 0.08;">
                     
                     <div class="d-flex justify-content-end gap-3">
-                        <button type="button" class="btn btn-light d-flex align-items-center gap-2" data-bs-dismiss="modal" style="border: 1px solid #e2e8f0; border-radius: 10px; padding: 0.55rem 1.4rem; font-weight: 600; color: #475569; background: #ffffff;">
-                            <i class="bi bi-x fs-5" style="margin-left: -4px;"></i> Cancel
+                        <button type="button" class="btn btn-light d-flex align-items-center justify-content-center" data-bs-dismiss="modal" style="border: 1px solid #e2e8f0; border-radius: 10px; padding: 0.55rem 1.4rem; font-weight: 600; color: #475569; background: #ffffff;">
+                            Cancel
                         </button>
-                        <button type="submit" class="btn btn-primary d-flex align-items-center gap-2" style="border-radius: 10px; padding: 0.55rem 1.4rem; font-weight: 600; background: #2563eb; border: none; box-shadow: 0 4px 12px rgba(37,99,235,0.25);">
-                            <i class="bi bi-floppy"></i> Save Employee
+                        <button type="submit" class="btn btn-primary d-flex align-items-center justify-content-center" style="border-radius: 10px; padding: 0.55rem 1.4rem; font-weight: 600; background: #2563eb; border: none; box-shadow: 0 4px 12px rgba(37,99,235,0.25);">
+                            SAVE EMPLOYEE
                         </button>
                     </div>
                 </form>

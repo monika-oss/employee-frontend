@@ -5,7 +5,15 @@ document.addEventListener('DOMContentLoaded', () => {
         return;
     }
 
-    document.getElementById('userNameDisplay').textContent = localStorage.getItem('userName');
+    const userName = localStorage.getItem('userName') || 'Employee';
+    const userNameDisplay = document.getElementById('userNameDisplay');
+    if (userNameDisplay) userNameDisplay.textContent = userName;
+    
+    const dropdownUserName = document.getElementById('dropdownUserName');
+    if (dropdownUserName) dropdownUserName.textContent = userName;
+    
+    const dropdownAvatarCircle = document.getElementById('dropdownAvatarCircle');
+    if (dropdownAvatarCircle && userName) dropdownAvatarCircle.textContent = userName.charAt(0).toUpperCase();
 
     const profileForm = document.getElementById('profileForm');
     const alertContainer = document.getElementById('alertContainer');
@@ -47,9 +55,19 @@ document.addEventListener('DOMContentLoaded', () => {
         if (isEditing) {
             saveActions.classList.remove('d-none');
             editBtn.classList.add('d-none');
+            
+            // Focus and highlight
+            nameInput.focus();
+            nameInput.classList.remove('highlight-pulse');
+            phoneInput.classList.remove('highlight-pulse');
+            void nameInput.offsetWidth; // Trigger reflow to restart animation
+            nameInput.classList.add('highlight-pulse');
+            phoneInput.classList.add('highlight-pulse');
         } else {
             saveActions.classList.add('d-none');
             editBtn.classList.remove('d-none');
+            nameInput.classList.remove('highlight-pulse');
+            phoneInput.classList.remove('highlight-pulse');
         }
     };
 
@@ -63,6 +81,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
     profileForm.addEventListener('submit', async (e) => {
         e.preventDefault();
+        
+        const newName = nameInput.value.trim();
+        const newPhone = phoneInput.value.trim();
+        
+        if (newName === originalData.name && newPhone === originalData.phone) {
+            toggleEdit(false);
+            return; // No changes made, do not show success message
+        }
         
         try {
             await apiFetch('/employees/profile/me', {
