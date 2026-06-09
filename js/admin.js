@@ -675,6 +675,12 @@ document.addEventListener('DOMContentLoaded', () => {
             showAlert('Please enter a valid 10-digit phone number', 'danger');
             return;
         }
+        
+        const isDuplicatePhone = employees.some(e => e.phone === empData.phone && String(e.id) !== dbId);
+        if (isDuplicatePhone) {
+            showAlert('This phone number is already registered to another employee', 'danger');
+            return;
+        }
         if (!empData.department) {
             showAlert('Please select a department', 'danger');
             return;
@@ -822,6 +828,12 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         if (!/^\d{10}$/.test(updatedData.phone)) {
             showAlert('Please enter a valid 10-digit phone number', 'danger');
+            return;
+        }
+
+        const isDuplicatePhone = employees.some(e => e.phone === updatedData.phone && e.id !== id);
+        if (isDuplicatePhone) {
+            showAlert('This phone number is already registered to another employee', 'danger');
             return;
         }
         if (!updatedData.department) {
