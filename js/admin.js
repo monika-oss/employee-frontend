@@ -344,8 +344,8 @@ document.addEventListener('DOMContentLoaded', () => {
                                 <span class="fw-bold" style="color: #64748b; font-size: 0.9rem;">${emp.employee_id}</span>
                             </td>
                             <td style="min-width: 180px;">
-                                <input type="text" class="form-control form-control-sm mb-1" id="inline_name_${emp.id}" value="${emp.name}" placeholder="Name">
-                                <input type="text" class="form-control form-control-sm" id="inline_phone_${emp.id}" value="${emp.phone}" placeholder="Phone">
+                                <input type="text" class="form-control form-control-sm mb-1" id="inline_name_${emp.id}" value="${emp.name}" placeholder="Name" required pattern="^[a-zA-Z\\s]{3,}$" title="Name must be at least 3 characters and contain only letters and spaces">
+                                <input type="text" class="form-control form-control-sm" id="inline_phone_${emp.id}" value="${emp.phone}" placeholder="Phone" required pattern="^\\d{10}$" title="Phone number must be exactly 10 digits">
                             </td>
                             <td style="min-width: 250px;"><input type="email" class="form-control form-control-sm" id="inline_email_${emp.id}" value="${emp.email}"></td>
                             <td style="min-width: 160px;">
@@ -811,6 +811,23 @@ document.addEventListener('DOMContentLoaded', () => {
     window.saveInlineEdit = async (id) => {
         const emp = employees.find(e => e.id === id);
         if (!emp) return;
+
+        const nameInput = document.getElementById(`inline_name_${id}`);
+        const phoneInput = document.getElementById(`inline_phone_${id}`);
+        const emailInput = document.getElementById(`inline_email_${id}`);
+
+        if (!nameInput.checkValidity()) {
+            nameInput.reportValidity();
+            return;
+        }
+        if (!phoneInput.checkValidity()) {
+            phoneInput.reportValidity();
+            return;
+        }
+        if (!emailInput.checkValidity()) {
+            emailInput.reportValidity();
+            return;
+        }
 
         const updatedData = {
             employee_id: emp.employee_id,
