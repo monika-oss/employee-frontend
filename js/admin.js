@@ -131,6 +131,38 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const loadEmployees = async () => {
         try {
+            const tableBody = document.getElementById('employeeTableBody');
+            const cardView = document.getElementById('employeeCardView');
+            
+            if (tableBody) {
+                tableBody.innerHTML = Array(5).fill(`
+                    <tr class="placeholder-glow">
+                        <td><span class="placeholder col-8 rounded"></span></td>
+                        <td>
+                            <div class="d-flex align-items-center gap-2">
+                                <span class="placeholder rounded-circle" style="width: 32px; height: 32px;"></span>
+                                <span class="placeholder col-6 rounded"></span>
+                            </div>
+                        </td>
+                        <td><span class="placeholder col-8 rounded"></span></td>
+                        <td><span class="placeholder col-6 rounded"></span></td>
+                        <td><span class="placeholder col-6 rounded"></span></td>
+                        <td><span class="placeholder col-8 rounded"></span></td>
+                        <td><span class="placeholder col-4 rounded"></span></td>
+                    </tr>
+                `).join('');
+            }
+            
+            if (cardView) {
+                cardView.innerHTML = Array(3).fill(`
+                    <div class="col-12 col-md-6 col-lg-4 mb-3">
+                        <div class="card border-0 shadow-sm placeholder-glow p-3" style="border-radius: 12px; height: 180px;">
+                            <span class="placeholder col-12 h-100 rounded"></span>
+                        </div>
+                    </div>
+                `).join('');
+            }
+
             employees = await apiFetch('/employees');
             populateFilterDropdowns();
             renderEmployees();
