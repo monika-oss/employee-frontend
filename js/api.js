@@ -159,3 +159,36 @@ window.showConfirm = async (title, text = '') => {
     });
     return result.isConfirmed;
 };
+
+// Global Input Restrictions (Keyboard Level)
+document.addEventListener('input', (e) => {
+    const id = e.target.id;
+    if (!id) return;
+
+    // Restrict Name to letters and spaces only
+    if (id === 'empName' || id === 'profileName' || id.startsWith('inline_name_')) {
+        const originalValue = e.target.value;
+        const newValue = originalValue.replace(/[^a-zA-Z\s]/g, '');
+        if (originalValue !== newValue) {
+            e.target.value = newValue;
+        }
+    }
+
+    // Restrict Phone to digits only (max 10)
+    if (id === 'empPhone' || id === 'profilePhone' || id.startsWith('inline_phone_')) {
+        const originalValue = e.target.value;
+        const newValue = originalValue.replace(/\D/g, '').slice(0, 10);
+        if (originalValue !== newValue) {
+            e.target.value = newValue;
+        }
+    }
+
+    // Restrict Salary to positive digits only
+    if (id === 'empSalary' || id.startsWith('inline_salary_')) {
+        const originalValue = e.target.value;
+        const newValue = originalValue.replace(/\D/g, '');
+        if (originalValue !== newValue) {
+            e.target.value = newValue;
+        }
+    }
+});
