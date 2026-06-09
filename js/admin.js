@@ -340,7 +340,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (editingEmployeeId === emp.id) {
                     return `
                         <tr style="background-color: #f8fafc;">
-                            <td style="min-width: 100px;"><input type="text" class="form-control form-control-sm" id="inline_empId_${emp.id}" value="${emp.employee_id}"></td>
+                            <td style="min-width: 100px;"><input type="text" class="form-control form-control-sm" id="inline_empId_${emp.id}" value="${emp.employee_id}" readonly style="background-color: #e2e8f0; border-color: #cbd5e1; color: #64748b; cursor: not-allowed; font-weight: 600;"></td>
                             <td style="min-width: 180px;">
                                 <input type="text" class="form-control form-control-sm mb-1" id="inline_name_${emp.id}" value="${emp.name}" placeholder="Name">
                                 <input type="text" class="form-control form-control-sm" id="inline_phone_${emp.id}" value="${emp.phone}" placeholder="Phone">
