@@ -486,7 +486,10 @@
 
                     <div id="profileUpdatePasswordView" class="d-none">
                         <div style="height: 1px; background: #f1f5f9; margin: 10px 0;"></div>
-                        <input type="password" class="form-control shadow-none mb-3 mt-3" id="newPasswordInput" placeholder="New Password" style="border: 1px solid #3B82F6; border-radius: 6px; font-size: 0.85rem; padding: 0.6rem 12px; color: #64748b;">
+                        <div class="position-relative mb-3 mt-3">
+                            <input type="password" class="form-control shadow-none w-100" id="newPasswordInput" placeholder="New Password" style="border: 1px solid #3B82F6; border-radius: 6px; font-size: 0.85rem; padding: 0.6rem 2.5rem 0.6rem 12px; color: #64748b;">
+                            <i class="bi bi-eye-slash position-absolute" style="right: 12px; top: 50%; transform: translateY(-50%); cursor: pointer; color: #94a3b8; font-size: 1rem; transition: color 0.2s;" onmouseover="this.style.color='#3B82F6'" onmouseout="this.style.color='#94a3b8'" onclick="const input = document.getElementById('newPasswordInput'); if(input.type === 'password') { input.type = 'text'; this.classList.replace('bi-eye-slash', 'bi-eye'); } else { input.type = 'password'; this.classList.replace('bi-eye', 'bi-eye-slash'); }"></i>
+                        </div>
                         <div class="d-flex gap-2">
                             <button class="btn fw-bold w-50 d-flex align-items-center justify-content-center text-white" style="background: linear-gradient(135deg, #3B82F6 0%, #4F46E5 100%); border-radius: 6px; font-size: 0.85rem; border: none; padding: 0.5rem;" onclick="saveNewPassword()">
                                 Save
