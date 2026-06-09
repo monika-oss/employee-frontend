@@ -131,10 +131,23 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const loadEmployees = async () => {
         try {
+            const tableView = document.getElementById('employeeTableView');
             const tableBody = document.getElementById('employeeTableBody');
             const cardView = document.getElementById('employeeCardView');
+            const cardPaginationContainer = document.getElementById('cardPaginationContainer');
             
-            if (tableBody) {
+            // Update view visibility FIRST so the correct skeleton shows
+            if (currentView === 'list') {
+                if (tableView) tableView.classList.remove('d-none');
+                if (cardView) cardView.classList.add('d-none');
+                if (cardPaginationContainer) cardPaginationContainer.classList.add('d-none');
+            } else {
+                if (tableView) tableView.classList.add('d-none');
+                if (cardView) cardView.classList.remove('d-none');
+                if (cardPaginationContainer) cardPaginationContainer.classList.add('d-none'); // Hide pagination while loading
+            }
+            
+            if (tableBody && currentView === 'list') {
                 tableBody.innerHTML = Array(5).fill(`
                     <tr class="placeholder-glow">
                         <td><span class="placeholder col-8 rounded"></span></td>
@@ -153,7 +166,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 `).join('');
             }
             
-            if (cardView) {
+            if (cardView && currentView === 'card') {
                 cardView.innerHTML = Array(3).fill(`
                     <div class="col-12 col-md-6 col-lg-4 mb-3">
                         <div class="card border-0 shadow-sm placeholder-glow p-3" style="border-radius: 12px; height: 180px;">
