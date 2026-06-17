@@ -158,6 +158,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if (tableBody && currentView === 'list') {
                 tableBody.innerHTML = Array(5).fill(`
                     <tr class="placeholder-glow">
+                        <td><span class="placeholder col-4 rounded"></span></td>
                         <td><span class="placeholder col-8 rounded"></span></td>
                         <td>
                             <div class="d-flex align-items-center gap-2">
@@ -338,16 +339,18 @@ document.addEventListener('DOMContentLoaded', () => {
             cardPaginationContainer.classList.add('d-none');
             
             if (filteredEmployees.length === 0) {
-                tableBody.innerHTML = '<tr><td colspan="7" class="text-center py-4 text-muted">No employees found.</td></tr>';
+                tableBody.innerHTML = '<tr><td colspan="8" class="text-center py-4 text-muted">No employees found.</td></tr>';
                 document.getElementById('paginationInfo').textContent = 'Showing 0 to 0 of 0 employees';
                 document.getElementById('adminPagination').innerHTML = '';
                 return;
             }
 
-            tableBody.innerHTML = paginatedEmployees.map(emp => {
+            tableBody.innerHTML = paginatedEmployees.map((emp, index) => {
+                const serialNo = startIndex + index + 1;
                 if (editingEmployeeId === emp.id) {
                     return `
                         <tr style="background-color: #f8fafc;">
+                            <td style="vertical-align: middle; font-weight: 700; color: #64748b; font-size: 0.9rem;">${serialNo}</td>
                             <td style="min-width: 100px; vertical-align: middle;">
                                 <span class="fw-bold" style="color: #64748b; font-size: 0.9rem;">${emp.employee_id}</span>
                             </td>
@@ -379,6 +382,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 const deptClass = getDeptBadgeClass(emp.department);
                 return `
                     <tr>
+                        <td class="fw-bold text-dark" style="font-size: 0.85rem;">${serialNo}</td>
                         <td class="fw-semibold text-secondary" style="font-size: 0.85rem;">${emp.employee_id}</td>
                         <td>
                             <div class="d-flex align-items-center">
