@@ -38,7 +38,7 @@ document.addEventListener('DOMContentLoaded', () => {
             document.getElementById('displayEmail').textContent = data.email;
             
             const displaySalary = document.getElementById('displaySalary');
-            if(displaySalary) displaySalary.textContent = '₹' + (data.salary ? Number(data.salary).toLocaleString('en-IN') : '0');
+            if(displaySalary) displaySalary.textContent = (data.salary ? Number(data.salary).toLocaleString('en-IN') : '0');
             
             nameInput.value = data.name;
             phoneInput.value = data.phone;
