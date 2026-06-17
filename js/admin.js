@@ -19,6 +19,14 @@ document.addEventListener('DOMContentLoaded', () => {
     const employeeForm = document.getElementById('employeeForm');
     const tableBody = document.getElementById('employeeTableBody');
     const alertContainer = document.getElementById('alertContainer');
+    
+    // Clear custom validity on input so the error style goes away immediately
+    const empPhoneInput = document.getElementById('empPhone');
+    if (empPhoneInput) {
+        empPhoneInput.addEventListener('input', () => {
+            empPhoneInput.setCustomValidity('');
+        });
+    }
 
     let employees = [];
     let isEditing = false;
@@ -627,6 +635,9 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('addEmpBtn').addEventListener('click', () => {
         isEditing = false;
         employeeForm.reset();
+        employeeForm.classList.remove('was-validated');
+        const phoneInput = document.getElementById('empPhone');
+        if (phoneInput) phoneInput.setCustomValidity('');
         document.getElementById('empDbId').value = '';
         document.getElementById('modalTitle').textContent = 'Add Employee';
         document.getElementById('modalSubtitle').textContent = 'Add new employee information and details';
@@ -758,6 +769,9 @@ document.addEventListener('DOMContentLoaded', () => {
         if (emp) {
             isEditing = true;
             originalEditingData = { ...emp };
+            employeeForm.classList.remove('was-validated');
+            const phoneInput = document.getElementById('empPhone');
+            if (phoneInput) phoneInput.setCustomValidity('');
             document.getElementById('empDbId').value = emp.id;
             document.getElementById('empId').value = emp.employee_id;
             document.getElementById('empName').value = emp.name;
