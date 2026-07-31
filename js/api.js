@@ -1,6 +1,6 @@
 const API_BASE_URL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' 
     ? 'http://localhost:5000/api' 
-    : 'https://employee-backend-1zst.onrender.com/api';
+    : 'https://employee-backend-fgok.onrender.com/api';
 
 const apiFetch = async (endpoint, options = {}) => {
     const token = localStorage.getItem('token');
